@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "New Wave")]
+[CreateAssetMenu(fileName = "Waves", menuName = "New Wave")]
 public class EnemyInfoSO : ScriptableObject
 {
     public int enemyCount;

@@ -125,7 +125,8 @@ PrefabInstance:
         type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8873044645233861464, guid: 07d3914b41c588c428cdf727f74b4293,
+        type: 3}
     - target: {fileID: 8685606527285289059, guid: 06cb2b131fe009c47a523671a8fa9ed8,
         type: 3}
       propertyPath: agent

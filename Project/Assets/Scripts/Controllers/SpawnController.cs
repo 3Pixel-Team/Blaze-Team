@@ -12,6 +12,8 @@ public class SpawnController : MonoBehaviour
 
     void Start()
     {
+        enemyInfo.enemyCount = 0;
+
         if (enemyInfo.enemies != null)
         {
             StartCoroutine(EnemySpawnner());

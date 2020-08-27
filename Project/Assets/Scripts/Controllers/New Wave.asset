@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f54b95e378b29d47aa37674ef6226a1, type: 3}
-  m_Name: Wave1
+  m_Name: New Wave
   m_EditorClassIdentifier: 
-  enemyCount: 0
-  spawnDelay: 0
-  maxEnemies: 0
-  waveCount: 0
-  enemies: []
-  spawnPoints: []
+  enemyCount: 10
+  spawnDelay: 1
+  maxEnemies: 10
+  waveCount: 1
+  enemies:
+  - {fileID: 4244329782038726597, guid: f7c5274e63a8ad144930fcd5797cbbb0, type: 3}
+  spawnPoints:
+  - {fileID: 5416090011319940004, guid: 4fc5774ef7731304e86099ab6d8a1cc2, type: 3}
