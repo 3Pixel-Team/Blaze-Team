@@ -893,7 +893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 289ac88027f927d41aed1ff3bbbd48dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 400060, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
+  player: {fileID: 0}
   rb: {fileID: 4989630436219349594}
   agent: {fileID: 8223915691700323739}
   aggroDistance: 10

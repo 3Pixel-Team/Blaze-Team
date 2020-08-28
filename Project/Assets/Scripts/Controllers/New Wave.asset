@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f54b95e378b29d47aa37674ef6226a1, type: 3}
   m_Name: New Wave
   m_EditorClassIdentifier: 
-  enemyCount: 10
+  enemyCount: 9
   spawnDelay: 1
   maxEnemies: 10
   waveCount: 1
   enemies:
-  - {fileID: 4244329782038726597, guid: f7c5274e63a8ad144930fcd5797cbbb0, type: 3}
+  - {fileID: 6139510741434673845, guid: 6c6d86617bf1bf743a98fbaf69d4f5e6, type: 3}
   spawnPoints:
   - {fileID: 5416090011319940004, guid: 4fc5774ef7731304e86099ab6d8a1cc2, type: 3}

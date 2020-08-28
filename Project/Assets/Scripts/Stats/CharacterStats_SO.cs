@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName ="Character Stats", menuName ="Character Stats/Stats")]
+
 public class CharacterStats_SO : ScriptableObject
 {
 
