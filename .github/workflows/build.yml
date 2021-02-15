@@ -32,7 +32,7 @@ jobs:
       - uses: webbertakken/unity-builder@v2.0-alpha-6
         id: unityBuild
         with:
-          projectPath: .
+          projectPath: ./Project
           unityVersion: 2019.4.11f1
           targetPlatform: Android
           versioning: Semantic
