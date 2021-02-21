@@ -98,7 +98,7 @@ public class EnemyController : MonoBehaviour, IPooledObject
 
     void ReportDeathToPlayer()
     {
-        player.GetComponent<PlayerQuest>().IncrementKillQuestGoal(enemyStats.stats.NpcName);
+        //player.GetComponent<PlayerQuest>().IncrementKillQuestGoal(enemyStats.stats.NpcName);
     }
 
 

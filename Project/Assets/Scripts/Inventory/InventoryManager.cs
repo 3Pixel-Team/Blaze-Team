@@ -9,7 +9,7 @@ public class InventoryManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance != null)
+        if (Instance != null)
         {
             Debug.Log("[InventoryManager] There is more then one inventory Instance");
             return;
@@ -21,7 +21,7 @@ public class InventoryManager : MonoBehaviour
 
     #endregion
 
-    public static readonly   int maxSlots   = 12;
+    public static readonly int maxSlots = 12;
     [SerializeField] private int emptySlots = 12;
 
     #region Events
@@ -33,7 +33,7 @@ public class InventoryManager : MonoBehaviour
     #endregion
 
     public Component inventoryCache = null;
-    [SerializeField] private GameObject      inventoryUI = null;
+    [SerializeField] private GameObject inventoryUI = null;
     [SerializeField] private InventorySlot[] inventorySlots;
 
     [SerializeField]
@@ -41,9 +41,10 @@ public class InventoryManager : MonoBehaviour
 
     private void Start()
     {
-        onChangedItemCall  += UpdateInventorySlots;
-        GameManager.Instance.OnLevelStarted += InitiateInventoryCache;
-        GameManager.Instance.OnLevelEnded   += GetWeaponsFromCache;
+        onChangedItemCall += UpdateInventorySlots;
+        GameManager.Instance.OnLevelStartedEvent += InitiateInventoryCache;
+        GameManager.Instance.OnLevelLostEvent += ClearInventoryCache;
+        GameManager.Instance.OnLevelWonEvent += GetInventoryFromCache;
 
 
 
@@ -54,7 +55,7 @@ public class InventoryManager : MonoBehaviour
     {
 
         inventorySlots = inventoryUI.GetComponentsInChildren<InventorySlot>();
-        if(items.Count != 0)
+        if (items.Count != 0)
         {
             for (int i = 0; i < items.Count; i++)
             {
@@ -108,10 +109,10 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < inventorySlots.Length; i++)
         {
-            if(inventorySlots[i].Item == null)
+            if (inventorySlots[i].Item == null)
             {
-                    inventorySlots[i].ClearSlot();
-                    emptySlots++;
+                inventorySlots[i].ClearSlot();
+                emptySlots++;
             }
             else
             {
@@ -119,18 +120,6 @@ public class InventoryManager : MonoBehaviour
                 emptySlots--;
             }
         }
-    }
-
-    public void InitiateInventoryCache()
-    {
-        inventoryCache = gameObject.AddComponent(typeof(InventoryCache));
-    }
-
-    public void GetWeaponsFromCache()
-    {
-        // todo
-
-        Destroy(inventoryCache);
     }
 
     public void ToggleInventory()
@@ -171,8 +160,8 @@ public class InventoryManager : MonoBehaviour
                 return true;
             }
         }
-        
-        if(emptySlots > 0)
+
+        if (emptySlots > 0)
         {
             return AddItem(item);
         }
@@ -186,7 +175,7 @@ public class InventoryManager : MonoBehaviour
 
     public void RemoveItemFromInventory(Item_SO item)
     {
-        if(item.stackSize == 0 || !item.isStackable)
+        if (item.stackSize == 0 || !item.isStackable)
         {
             items.Remove(item);
         }
@@ -196,6 +185,28 @@ public class InventoryManager : MonoBehaviour
         }
 
         onChangedItemCall?.Invoke();
+    }
+
+    #endregion
+
+
+    #region Temporary level inventory
+
+    public void InitiateInventoryCache()
+    {
+        inventoryCache = gameObject.AddComponent(typeof(InventoryCache));
+    }
+
+    public void ClearInventoryCache()
+    {
+        Destroy(inventoryCache);
+    }
+    
+    public void GetInventoryFromCache()
+    {
+        // todo
+
+        Destroy(inventoryCache);
     }
 
     #endregion

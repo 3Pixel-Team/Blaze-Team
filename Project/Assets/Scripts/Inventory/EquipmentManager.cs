@@ -63,12 +63,6 @@ public class EquipmentManager : MonoBehaviour
         LoadEquipment();
     }
 
-    private void Update()
-    {
-
-    }
-
-
     public void LoadEquipment()
     {
         equipmentSlots = equipmentUI.GetComponentsInChildren<InventorySlot>();
@@ -175,12 +169,12 @@ public class EquipmentManager : MonoBehaviour
     {
         if (itemType == ItemType.ARMOR)
         {
-            GameManager.Instance.stats.IncreaseArmour(amount);
+            GameManager.Instance.playerStats.IncreaseArmour(amount);
 
         }
         else if (itemType == ItemType.WEAPON)
         {
-            GameManager.Instance.stats.IncreaseDamage(amount);
+            GameManager.Instance.playerStats.IncreaseDamage(amount);
         }
     }
 
@@ -188,11 +182,11 @@ public class EquipmentManager : MonoBehaviour
     {
         if (itemType == ItemType.ARMOR)
         {
-            GameManager.Instance.stats.DecreaseArmour(amount);
+            GameManager.Instance.playerStats.DecreaseArmour(amount);
         }
         else if (itemType == ItemType.WEAPON)
         {
-            GameManager.Instance.stats.DecreaseDamage(amount);
+            GameManager.Instance.playerStats.DecreaseDamage(amount);
         }
     }
 

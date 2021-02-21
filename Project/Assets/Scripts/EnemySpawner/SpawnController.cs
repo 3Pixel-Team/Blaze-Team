@@ -10,26 +10,29 @@ public class SpawnController : MonoBehaviour
 
     public EnemySpawnerSO[] waveList;
     public GameObject[] spawnPoints;
-    
+
     private int actualWave = 0;
-    [HideInInspector]public int actualEnemiesAlive = 0;
+    [HideInInspector] public int actualEnemiesAlive = 0;
 
     #region Text messages
 
     public TextMeshProUGUI waitingWaveStartText;
     public TextMeshProUGUI waveState;
-
     #endregion
-    
+
     void Start()
     {
         Instance = this;
-        
+
         _objPooler = ObjectPooler.Instance;
-        waveList[0].enemyCount = 0;
+        foreach (EnemySpawnerSO e in waveList)
+        {
+            e.enemyCount = 0;
+        }
+
         StartCoroutine(StartWave());
 
-        foreach(GameObject o in spawnPoints)
+        foreach (GameObject o in spawnPoints)
         {
             o.GetComponent<Renderer>().enabled = false;
         }
@@ -43,22 +46,26 @@ public class SpawnController : MonoBehaviour
         waveState.text = $"Wave {actualWave + 1} starting";
         yield return new WaitForSeconds(2f);
         waveState.enabled = false;
+
         EnemySpawnerSO wave = waveList[actualWave];
-        actualWave++;
         while (wave.enemyCount < wave.maxEnemies)
         {
-            Vector3 spawnpoint = spawnPoints[Random.Range(0,spawnPoints.Length)].transform.position;
+
+            Vector3 spawnpoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
             int randomNumber = Random.Range(0, 21);
             randomNumber += difficultyRate;
+
             if (randomNumber <= 13)
             {
-                _objPooler.SpawnFromPool("Low", spawnpoint, Quaternion.identity);
-            }else if(randomNumber >= 14 && randomNumber <= 18)
+                _objPooler.SpawnFromPool(EnemyDifficulty.NORMAL, spawnpoint, Quaternion.identity);
+            }
+            else if (randomNumber >= 14 && randomNumber <= 18)
             {
-                _objPooler.SpawnFromPool("Medium", spawnpoint, Quaternion.identity);
-            }else
+                _objPooler.SpawnFromPool(EnemyDifficulty.RARE, spawnpoint, Quaternion.identity);
+            }
+            else
             {
-                _objPooler.SpawnFromPool("High", spawnpoint, Quaternion.identity);
+                _objPooler.SpawnFromPool(EnemyDifficulty.LEGENDARY, spawnpoint, Quaternion.identity);
             }
 
             yield return new WaitForSeconds(wave.spawnDelay);
@@ -67,7 +74,7 @@ public class SpawnController : MonoBehaviour
         }
         StartCoroutine(WaitForEndofWave());
     }
-    
+
     //prepare next wave and each 3 waves increase the probability to spawn higher tier enemies
     IEnumerator WaitForEndofWave()
     {
@@ -75,15 +82,15 @@ public class SpawnController : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
         }
-        
+
         waveState.enabled = enabled;
         waveState.text = "Wave finished";
+        actualWave++;
 
         if (actualWave < waveList.Length)
         {
-            StartCoroutine(StartingWave());
+            //StartCoroutine(StartingWave());
             yield return new WaitForSeconds(6f);
-            StartCoroutine(StartWave());
             if (actualWave % 3 == 0)
             {
                 difficultyRate++;
@@ -92,11 +99,14 @@ public class SpawnController : MonoBehaviour
             waveState.text = $"Wave {actualWave + 1}";
             yield return new WaitForSeconds(2);
             waveState.enabled = false;
+            StartCoroutine(StartWave());
         }
         else
         {
             waveState.text = "Stage finished!";
-            waveState.enabled = false;
+            waveState.enabled = true;
+            yield return new WaitForSeconds(2);
+            GameManager.Instance.GoToRestartScene();
         }
     }
 
@@ -105,7 +115,7 @@ public class SpawnController : MonoBehaviour
         waitingWaveStartText.enabled = true;
         for (int i = 5; i >= 0; i--)
         {
-            waitingWaveStartText.text = "Time left: "+i;
+            waitingWaveStartText.text = "Time left: " + i;
             yield return new WaitForSeconds(1);
         }
         waitingWaveStartText.enabled = false;

@@ -8,12 +8,24 @@ public class CharacterStats : MonoBehaviour
     public CharacterStats_SO stats_Template;
     public CharacterStats_SO stats;
 
+
+    public bool isPlayer = false;
+
     #endregion
 
     private void Start()
     {
-        LoadStats();
-        if(stats_Template != null)
+        if (isPlayer == true)
+        {
+            stats_Template = GameManager.Instance.playerStats;
+        }
+        else if (GetComponent<PlayerManager>())
+        {
+            isPlayer = true;
+            stats_Template = GameManager.Instance.playerStats;
+        }
+
+        if (stats_Template != null)
         {
             stats = Instantiate(stats_Template);
         }
@@ -141,7 +153,8 @@ public class CharacterStats : MonoBehaviour
 
     public void SaveStats()
     {
-        stats.SaveStats();
+        stats_Template = stats;
+        stats_Template.SaveStats();
     }
 
     public void LoadStats()

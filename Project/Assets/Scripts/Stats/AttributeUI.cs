@@ -14,14 +14,14 @@ public class AttributeUI : MonoBehaviour
     public TextMeshProUGUI amountOfAttribute;
     void Start()
     {
-        _stats = PlayerManager.Instance.playerStats;
+        _stats = PlayerManager.Instance.ingamePlayerStats;
         title.text = attribute.attributeName;
     }
     public void UpdateText()
     {
         if (_stats == null)
         {
-            _stats = PlayerManager.Instance.playerStats;
+            _stats = PlayerManager.Instance.ingamePlayerStats;
         }
         switch (attribute.attributeType)
         {
@@ -60,7 +60,7 @@ public class AttributeUI : MonoBehaviour
     {
         if (_stats == null)
         {
-            _stats = PlayerManager.Instance.playerStats;
+            _stats = PlayerManager.Instance.ingamePlayerStats;
         }
         switch (attribute.attributeType)
         {
@@ -93,7 +93,7 @@ public class AttributeUI : MonoBehaviour
     {
         if (_stats == null)
         {
-            _stats = PlayerManager.Instance.playerStats;
+            _stats = PlayerManager.Instance.ingamePlayerStats;
         }
         SkillTreeManager.Instance.AddAttribute(this);
     }

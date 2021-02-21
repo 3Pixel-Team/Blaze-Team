@@ -779,7 +779,7 @@ MonoBehaviour:
   healthBarText: {fileID: 0}
   expBar: {fileID: 0}
   expBarText: {fileID: 0}
-  playerStats: {fileID: 1724891631}
+  ingamePlayerStats: {fileID: 0}
   levelText: {fileID: 0}
   playerAnimator: {fileID: 8677077845011682370}
   attackButton: {fileID: 0}
@@ -838,6 +838,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats_Template: {fileID: 11400000, guid: 2e5c53cf9b869d04e9964267ec0baad9, type: 2}
   stats: {fileID: 0}
+  isPlayer: 1
 --- !u!114 &1794017324
 MonoBehaviour:
   m_ObjectHideFlags: 0

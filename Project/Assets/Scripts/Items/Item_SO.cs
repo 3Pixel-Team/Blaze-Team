@@ -54,7 +54,7 @@ public class Item_SO : ScriptableObject
             //needs to add remove item
             case ItemType.HEALTH:
                 Debug.Log("Gave Health");
-                PlayerManager.Instance.playerStats.GiveHealth(item.itemAmount);
+                PlayerManager.Instance.ingamePlayerStats.GiveHealth(item.itemAmount);
                 PlayerManager.Instance.UpdateHealthSlider();
                 break;
             case ItemType.ARMOR:

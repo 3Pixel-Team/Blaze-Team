@@ -17,7 +17,7 @@ namespace UI
         {
             switch (gameState)
             {
-                case GameManager.GameState.GameLoose:
+                case GameManager.GameState.GameLost:
                     //Todo - Refactor
                     button.GetComponentInChildren<TextMeshProUGUI>().SetText("Restart");
                     tittle.SetText("You S*ck!");
