@@ -32,6 +32,10 @@ public class Item_SO : ScriptableObject
     //armour stats
     public int armourAmount;
 
+    //cost
+    public int sellCost;
+    public int buyCost;
+
     #endregion
 
     public virtual Item_SO GetItem()
