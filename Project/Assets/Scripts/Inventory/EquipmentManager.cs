@@ -89,7 +89,7 @@ public class EquipmentManager : MonoBehaviour
         int slotIndex = (int)item.equipmentType;
 
         Item_SO oldItem = null;
-        item.RemoveItem(item);
+        item.RemoveItem();
         //if equipment slot is full, unequip the old item and add it to inventory
         if (currentEquipment[slotIndex] != null)
         {
@@ -120,7 +120,7 @@ public class EquipmentManager : MonoBehaviour
                 print("no other item type found");
                 break;
         }
-        item.RemoveItem(item);
+        item.RemoveItem();
         UpdateEquipment();
     }
 
@@ -152,7 +152,7 @@ public class EquipmentManager : MonoBehaviour
                     print("no other item type found");
                     break;
             }
-            item.AddItem(item);
+            item.AddItem();
         }
         else
         {

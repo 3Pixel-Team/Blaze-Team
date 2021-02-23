@@ -55,6 +55,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iconImage: {fileID: 8025409777207830906}
   itemNameText: {fileID: 3394130754665848773}
+  clickButton: {fileID: 4122385908273194270}
 --- !u!222 &6901343185386967511
 CanvasRenderer:
   m_ObjectHideFlags: 0

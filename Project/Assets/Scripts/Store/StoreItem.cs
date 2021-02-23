@@ -8,27 +8,36 @@ public class StoreItem : MonoBehaviour
 {
     public Image iconImage;
     public TextMeshProUGUI itemNameText;
-    Item_SO item;
-    bool selling;
+    public Button clickButton;
 
-    public void Init(Item_SO _item, bool _selling){
-        item = _item;
-        selling = _selling;
-
-        if(item != null){
-            iconImage.gameObject.SetActive(true);
-            iconImage.sprite = item.itemSprite;
-            itemNameText.gameObject.SetActive(true);
-            itemNameText.text = item.itemName;
-        }else
-        {
-            iconImage.gameObject.SetActive(false);
-            itemNameText.gameObject.SetActive(false);
-        }
+    public void Init(){
+        iconImage.gameObject.SetActive(false);
+        itemNameText.gameObject.SetActive(false);
     }
 
-    //button
-    public void Click(){
-        StoreManager.Instance.store.OpenDesc(item, selling);
+    public void InitBuy(Item_SO _item){
+        iconImage.gameObject.SetActive(true);
+        itemNameText.gameObject.SetActive(true);
+        
+        iconImage.sprite = _item.itemSprite;
+        itemNameText.text = _item.itemName;
+
+        clickButton.onClick.RemoveAllListeners();
+        clickButton.onClick.AddListener(()=>{
+            StoreManager.Instance.store.OpenBuyDesc(_item);
+        });
+    }
+
+    public void InitSell(Item_SO _item){
+        iconImage.gameObject.SetActive(true);
+        itemNameText.gameObject.SetActive(true);
+
+        iconImage.sprite = _item.itemSprite;
+        itemNameText.text = _item.itemName;
+
+        clickButton.onClick.RemoveAllListeners();
+        clickButton.onClick.AddListener(()=>{
+            StoreManager.Instance.store.OpenSellDesc(_item);
+        });
     }
 }

@@ -24,58 +24,90 @@ public class Store : MonoBehaviour
     public Button sellButton, buyButton;
 
     void Start(){
-        List<Item_SO> items = GameManager.Instance.items;
-
-        //only get weapons
-        for (int j = items.Count-1; j >= 0; j--)
-        {
-            if(items[j].itemType != ItemType.WEAPON){
-                items.RemoveAt(j);
-            }
-        }
-
-        InitItems(items, sellParent, true);
-        InitItems(items, buyParent, false);
-
-        descPanel.SetActive(false);
+        Init();
     }
 
-    void InitItems(List<Item_SO> items, Transform storeParent, bool selling){
-        //clear parents
-        for (int i = 0; i < items.Count; i++)
+    void Init(){
+        descPanel.SetActive(false);
+
+        List<Item_SO> sellItems = InventoryManager.Instance.items;
+        InitList(sellItems, sellParent, out List<StoreItem> _sellItems);
+        for (int i = 0; i < _sellItems.Count; i++)
         {
-            if(storeParent.childCount-1 < i/3){
-                Instantiate(storeParent.GetChild(0).gameObject, storeParent);
-            }
-            Transform parent = storeParent.GetChild(i/3);
-            for (int j = parent.childCount-1; j >= 0; j--)
-            {
-                DestroyImmediate(parent.GetChild(j).gameObject);
+            _sellItems[i].InitSell(sellItems[i]);
+        }
+
+        List<Item_SO> buyItems = GameManager.Instance.items;
+        InitList(GameManager.Instance.items, buyParent, out List<StoreItem> _buyItems);
+        for (int i = 0; i < _buyItems.Count; i++)
+        {
+            _buyItems[i].InitBuy(buyItems[i]);
+        }
+    }
+
+    void InitList(List<Item_SO> list, Transform _parent, out List<StoreItem> _storeItems){
+        //clear parents
+        for (int i = _parent.childCount-1; i > 0; i--)
+        {
+            DestroyImmediate(_parent.GetChild(i).gameObject);
+        }
+        for (int j = _parent.GetChild(0).childCount-1; j >= 0; j--)
+        {
+            DestroyImmediate(_parent.GetChild(0).GetChild(j).gameObject);
+        }
+        int c = list.Count>12?list.Count:12;
+        for (int i = 0; i < c; i++)
+        {
+            if(_parent.childCount-1 < i/3){
+                Instantiate(_parent.GetChild(0).gameObject, _parent);
             }
         }
 
-        //prepare buy item slots
+        //prepare item slots
         List<StoreItem> storeItems = new List<StoreItem>();
-        for (int i = 0; i < storeParent.childCount; i++)
+        for (int i = 0; i < _parent.childCount; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                StoreItem st = Instantiate(storeNodePrefab, storeParent.GetChild(i)).GetComponent<StoreItem>();
-                st.Init(null, selling);
+                StoreItem st = Instantiate(storeNodePrefab, _parent.GetChild(i)).GetComponent<StoreItem>();
+                st.Init();
                 storeItems.Add(st);
             }
         }
-        //init buy items
-        for (int i = 0; i < storeItems.Count; i++)
+        for (int i = storeItems.Count-1; i >= 0; i--)
         {
-            if(i < items.Count){
-                storeItems[i].Init(items[i], selling);
+            if(i >= list.Count){
+                storeItems.RemoveAt(i);
             }
         }
+        _storeItems = storeItems;
     }
 
     //called in store items button
-    public void OpenDesc(Item_SO _item, bool selling){
+    public void OpenBuyDesc(Item_SO _item){
+        SetDesc(_item);
+
+        sellButton.gameObject.SetActive(false);
+        buyButton.gameObject.SetActive(true);
+        buyCostText.text = _item.buyCost.ToString();
+
+        buyButton.onClick.RemoveAllListeners();
+        buyButton.onClick.AddListener(()=> BuyItem(_item));
+    }
+
+    //called in store items button
+    public void OpenSellDesc(Item_SO _item){
+        SetDesc(_item);
+
+        buyButton.gameObject.SetActive(false);
+        sellButton.gameObject.SetActive(true);
+        sellCostText.text = _item.sellCost.ToString();
+
+        sellButton.onClick.RemoveAllListeners();
+        sellButton.onClick.AddListener(()=> SellItem(_item));
+    }
+
+    void SetDesc(Item_SO _item){
         descPanel.SetActive(true);
 
         titleText.text = _item.itemName;
@@ -85,23 +117,6 @@ public class Store : MonoBehaviour
         shotPerSecText.text = _item.shotsPerSec.ToString();
         magazineSizeText.text = _item.magazineSize.ToString();
         damageText.text = _item.weaponDamage.ToString();
-
-        sellButton.gameObject.SetActive(false);
-        buyButton.gameObject.SetActive(false);
-        if(selling){
-            sellButton.gameObject.SetActive(true);
-            sellCostText.text = _item.sellCost.ToString();
-
-            sellButton.onClick.RemoveAllListeners();
-            sellButton.onClick.AddListener(()=> SellItem(_item));
-        }else
-        {
-            buyButton.gameObject.SetActive(true);
-            buyCostText.text = _item.buyCost.ToString();
-
-            buyButton.onClick.RemoveAllListeners();
-            buyButton.onClick.AddListener(()=> BuyItem(_item));
-        }
     }
 
     //called in close button
@@ -111,11 +126,20 @@ public class Store : MonoBehaviour
 
     //button
     public void BuyItem(Item_SO _item){
-        
+        if(GameManager.Instance.playerStats.currentCredit >= _item.buyCost){
+            Debug.Log("cek buy item " + _item.itemName);
+            _item.AddItem();
+            Init();
+        }
     }
 
     //button
     public void SellItem(Item_SO _item){
-
+        if(GameManager.Instance.playerStats.currentCredit >= _item.sellCost){
+            Debug.Log("cek sell item " + _item.itemName);
+            GameManager.Instance.playerStats.GiveCredit(_item.sellCost);
+            _item.RemoveItem();
+            Init();
+        }
     }
 }
