@@ -11,7 +11,7 @@ public class StoreManager : MonoBehaviour
     void Awake(){
         if (Instance != null)
         {
-            Debug.Log("[InventoryManager] There is more then one inventory Instance");
+            Debug.Log("[StoreManager] There is more then one Store Instance");
             return;
         }
         Instance = this;
