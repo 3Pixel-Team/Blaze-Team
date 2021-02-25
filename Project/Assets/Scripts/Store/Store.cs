@@ -128,6 +128,7 @@ public class Store : MonoBehaviour
     public void BuyItem(Item_SO _item){
         if(GameManager.Instance.playerStats.currentCredit >= _item.buyCost){
             Debug.Log("cek buy item " + _item.itemName);
+            GameManager.Instance.playerStats.TakeCredit(_item.buyCost);
             _item.AddItem();
             Init();
         }
