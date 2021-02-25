@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -37,7 +38,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private InventorySlot[] inventorySlots;
 
     [SerializeField]
-    private List<Item_SO> items = new List<Item_SO>();
+    public List<Item_SO> items = new List<Item_SO>();
 
     private void Start()
     {
@@ -96,9 +97,20 @@ public class InventoryManager : MonoBehaviour
     public void RemoveItem(Item_SO item)
     {
         items.Remove(item);
-        item.RemoveItem(item);
+        item.RemoveItem();
 
         onChangedItemCall?.Invoke();
+    }
+
+    public List<InventorySlot> NotEmptySlots(){
+        List<InventorySlot> slots = new List<InventorySlot>();
+        foreach (var slot in inventorySlots)
+        {
+            if(slot.Item != null){
+                slots.Add(slot);
+            }
+        }
+        return slots;
     }
 
     #endregion
@@ -109,16 +121,25 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < inventorySlots.Length; i++)
         {
-            if (inventorySlots[i].Item == null)
+            if(i < items.Count){
+                inventorySlots[i].AddItemToSlot(items[i]);
+                emptySlots--;
+            }else
             {
                 inventorySlots[i].ClearSlot();
                 emptySlots++;
             }
-            else
-            {
-                inventorySlots[i].AddItemToSlot(items[i]);
-                emptySlots--;
-            }
+
+            // if (inventorySlots[i].Item == null)
+            // {
+            //     inventorySlots[i].ClearSlot();
+            //     emptySlots++;
+            // }
+            // else
+            // {
+            //     inventorySlots[i].AddItemToSlot(items[i]);
+            //     emptySlots--;
+            // }
         }
     }
 

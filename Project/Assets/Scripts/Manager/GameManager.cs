@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using System.Linq;
 
     public class GameManager : MonoBehaviour
     {
@@ -18,8 +20,14 @@ using UnityEngine.SceneManagement;
                 return;
             }
             Instance = this;
+
+            LoadResources();
         }
 
+    #endregion
+
+    #region ScriptableObject data
+    public List<Item_SO> items = new List<Item_SO>();
     #endregion
 
 
@@ -57,6 +65,11 @@ using UnityEngine.SceneManagement;
         OnPlayerDeathEvent += OnPlayerDeath;
         OnLevelLostEvent += OnLevelLostManager;
         OnLevelWonEvent += OnLevelWonManager;
+    }
+
+    void LoadResources(){
+        items = new List<Item_SO>();
+        items = Resources.LoadAll<Item_SO>("Items").ToList();
     }
 
     private void Update()

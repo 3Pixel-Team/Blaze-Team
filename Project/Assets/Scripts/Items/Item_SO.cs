@@ -32,6 +32,10 @@ public class Item_SO : ScriptableObject
     //armour stats
     public int armourAmount;
 
+    //cost
+    public int sellCost;
+    public int buyCost;
+
     #endregion
 
     public virtual Item_SO GetItem()
@@ -85,14 +89,14 @@ public class Item_SO : ScriptableObject
         }
     }
 
-    public void RemoveItem(Item_SO item)
+    public void RemoveItem()
     {
-        InventoryManager.Instance.RemoveItemFromInventory(item);
+        InventoryManager.Instance.RemoveItemFromInventory(this);
     }
 
-    public void AddItem(Item_SO item)
+    public void AddItem()
     {
-        InventoryManager.Instance.AddItemToInventory(item);
+        InventoryManager.Instance.AddItemToInventory(this);
     }
 
     public void EquipItem(Item_SO item)
