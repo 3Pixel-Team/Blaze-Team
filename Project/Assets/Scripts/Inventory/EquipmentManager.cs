@@ -1,15 +1,14 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class EquipmentManager : MonoBehaviour
 {
-
-    #region Singleton
-
     public static EquipmentManager Instance;
+
+    public List<Item_SO> equipmentItems = new List<Item_SO>();
 
     private void Awake()
     {
-
         if (Instance != null)
         {
             Debug.Log("[Equipment Manager] There is more than 1 instance of the equipment manager!");
@@ -18,152 +17,40 @@ public class EquipmentManager : MonoBehaviour
         {
             Instance = this;
         }
+
+        DontDestroyOnLoad(this.gameObject);
     }
 
-    #endregion
-
-    public delegate void OnEquipmentChanged(Item_SO newItem, Item_SO oldItem);
-    public OnEquipmentChanged onEquipmentChanged;
-    #region References
-
-    private Item_SO[] currentEquipment;
-
-
-    public GameObject equipmentUI;
-
-    public Item_SO UiTestSimulationItemInsert;
-
-    public InventorySlot[] equipmentSlots;
-
-    #endregion
-
-
-    private void Start()
-    {
-        if (equipmentUI.activeSelf == true)
+    /// <summary>
+    /// get item equipped in the slot
+    /// </summary>
+    public Item_SO GetEquipment(EquipmentType _type){
+        for (int i = 0; i < equipmentItems.Count; i++)
         {
-            equipmentUI.SetActive(false);
-        }
-
-        //setting up the equipment slots
-        int equipmentSlots = System.Enum.GetNames(typeof(EquipmentType)).Length;
-        currentEquipment = new Item_SO[equipmentSlots];
-
-        DontDestroyOnLoad(gameObject);
-
-        if (UiTestSimulationItemInsert)
-        {
-            if (UiTestSimulationItemInsert.itemType == ItemType.ARMOR)
-                EquipItem(UiTestSimulationItemInsert);
-            if (UiTestSimulationItemInsert.itemType == ItemType.WEAPON)
-                EquipItem(UiTestSimulationItemInsert);
-            UiTestSimulationItemInsert = null;
-        }
-
-        LoadEquipment();
-    }
-
-    public void LoadEquipment()
-    {
-        equipmentSlots = equipmentUI.GetComponentsInChildren<InventorySlot>();
-        UpdateEquipment();
-    }
-
-    public void UpdateEquipment()
-    {
-        for (int i = 0; i < equipmentSlots.Length; i++)
-        {
-            if (currentEquipment[i] == null)
-            {
-                equipmentSlots[i].ClearSlot();
-            }
-            else
-            {
-                equipmentSlots[i].AddItemToSlot(currentEquipment[i]);
+            if(equipmentItems[i].equipmentType == _type){
+                return equipmentItems[i];
             }
         }
+        return null;
     }
 
+    /// <summary>
+    /// Equip Item
+    /// </summary>
     public void EquipItem(Item_SO item)
     {
-        int slotIndex = (int)item.equipmentType;
-
-        Item_SO oldItem = null;
-        item.RemoveItem();
-        //if equipment slot is full, unequip the old item and add it to inventory
-        if (currentEquipment[slotIndex] != null)
-        {
-            oldItem = currentEquipment[slotIndex];
-            Unequip(oldItem, slotIndex);    
-        }
-
-        //set the current equipped item to the equipment slot
-        currentEquipment[slotIndex] = item;
-
-        if (onEquipmentChanged != null)
-        {
-            onEquipmentChanged.Invoke(item, oldItem);
-        }
-
-
-        switch (item.itemType)
-        {
-            case ItemType.ARMOR:
-                IncreaseStat(item.itemType, item.itemAmount);
-                break;
-
-            case ItemType.WEAPON:
-                IncreaseStat(item.itemType, item.itemAmount);
-                break;
-
-            default:
-                print("no other item type found");
-                break;
-        }
-        item.RemoveItem();
-        UpdateEquipment();
+        equipmentItems.Add(item);
+        IncreaseStat(item.itemType, item.itemAmount);
     }
 
-    #region Unequipping
-
-    public void Unequip(Item_SO item, int slot)
+    /// <summary>
+    /// Unequip Item
+    /// </summary>
+    public void Unequip(Item_SO item)
     {
-        if(currentEquipment[slot] != null)
-        {
-            equipmentSlots[slot].ClearSlot();
-            currentEquipment[slot] = null;
-
-            if (onEquipmentChanged != null)
-            {
-                onEquipmentChanged.Invoke(null, item);
-            }
-
-            switch (item.itemType)
-            {
-                case ItemType.ARMOR:
-                    DecreaseStat(item.itemType, item.itemAmount);
-                    break;
-
-                case ItemType.WEAPON:
-                    DecreaseStat(item.itemType, item.itemAmount);
-                    break;
-
-                default:
-                    print("no other item type found");
-                    break;
-            }
-            item.AddItem();
-        }
-        else
-        {
-            Debug.Log("[Equipment Manager] There is no item to Unequip!");
-        }
-        UpdateEquipment();
+        equipmentItems.Remove(GetEquipment(item.equipmentType));
+        DecreaseStat(item.itemType, item.itemAmount);
     }
-
-    #endregion 
-
-    #region StatsChangers
 
     public void IncreaseStat(ItemType itemType, int amount)
     {
@@ -188,15 +75,5 @@ public class EquipmentManager : MonoBehaviour
         {
             GameManager.Instance.playerStats.DecreaseDamage(amount);
         }
-    }
-
-    #endregion StatsChangers
-
-    public void ToggleEquipment()
-    {
-        if (equipmentUI.activeInHierarchy)
-            equipmentUI.SetActive(false);
-        else
-            equipmentUI.SetActive(true);
     }
 }

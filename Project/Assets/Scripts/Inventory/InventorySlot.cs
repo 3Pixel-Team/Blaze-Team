@@ -55,7 +55,7 @@ public class InventorySlot : MonoBehaviour
             {
                 ClearSlot();
             }
-            tempItem.UseItem(tempItem);
+            tempItem.UseItem();
 
             UpdateStackSize();
         }
@@ -64,10 +64,10 @@ public class InventorySlot : MonoBehaviour
 
     public void UnequipItem()
     {
-        if(Item != null)
-        {
-            EquipmentManager.Instance.Unequip(Item, (int)Item.equipmentType);
-        }
+        // if(Item != null)
+        // {
+        //     EquipmentManager.Instance.Unequip(Item, (int)Item.equipmentType);
+        // }
     }
 
     public void UpdateStackSize()
@@ -82,5 +82,4 @@ public class InventorySlot : MonoBehaviour
             itemAmount.enabled = true;
         }
     }
-
 }

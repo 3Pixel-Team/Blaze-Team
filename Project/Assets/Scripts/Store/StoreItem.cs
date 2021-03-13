@@ -10,7 +10,7 @@ public class StoreItem : MonoBehaviour
     public TextMeshProUGUI itemNameText;
     public Button clickButton;
 
-    public void Init(){
+    public void InitStoreItem(){
         iconImage.gameObject.SetActive(false);
         itemNameText.gameObject.SetActive(false);
     }
@@ -24,7 +24,7 @@ public class StoreItem : MonoBehaviour
 
         clickButton.onClick.RemoveAllListeners();
         clickButton.onClick.AddListener(()=>{
-            StoreManager.Instance.store.OpenBuyDesc(_item);
+            MainBaseManager.Instance.store.OpenBuyDesc(_item);
         });
     }
 
@@ -37,7 +37,7 @@ public class StoreItem : MonoBehaviour
 
         clickButton.onClick.RemoveAllListeners();
         clickButton.onClick.AddListener(()=>{
-            StoreManager.Instance.store.OpenSellDesc(_item);
+            MainBaseManager.Instance.store.OpenSellDesc(_item);
         });
     }
 }

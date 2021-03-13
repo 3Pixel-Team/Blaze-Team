@@ -48,65 +48,43 @@ public class Item_SO : ScriptableObject
         return itemType;
     }
 
-    public void UseItem(Item_SO item)
+    public void UseItem()
     {
-        if (item == null) return;
-
-        Debug.Log("[Item_SO] Using the item: " + item.itemName);
-        switch (item.itemType)
+        Debug.Log("[Item_SO] Using the item: " + itemName);
+        switch (itemType)
         {
             //needs to add remove item
             case ItemType.HEALTH:
                 Debug.Log("Gave Health");
-                PlayerManager.Instance.ingamePlayerStats.GiveHealth(item.itemAmount);
+                PlayerManager.Instance.ingamePlayerStats.GiveHealth(itemAmount);
                 PlayerManager.Instance.UpdateHealthSlider();
                 break;
             case ItemType.ARMOR:
-                EquipmentManager.Instance.EquipItem(item);
+                EquipmentManager.Instance.EquipItem(this);
                 break;
             case ItemType.WEAPON:
-                EquipmentManager.Instance.EquipItem(item);
+                EquipmentManager.Instance.EquipItem(this);
                 break;
             case ItemType.AMMO:
-                if (item.currentAmmo == item.maxAmmo)
+                if (currentAmmo == maxAmmo)
                 {
                     Debug.Log("Ammo is full");
                 }
-                else if (item.currentAmmo + item.itemAmount >= maxAmmo)
+                else if (currentAmmo + itemAmount >= maxAmmo)
                 {
-                    item.currentAmmo = item.maxAmmo;
+                    currentAmmo = maxAmmo;
                 }
                 else
                 {
-                    item.currentAmmo += item.itemAmount;
+                    currentAmmo += itemAmount;
                 }
                 break;
         }
 
-        if (item.stackSize >= 1 && item.isStackable)
+        if (stackSize >= 1 && isStackable)
         {
-            item.stackSize--;
+            stackSize--;
         }
-    }
-
-    public void RemoveItem()
-    {
-        InventoryManager.Instance.RemoveItemFromInventory(this);
-    }
-
-    public void AddItem()
-    {
-        InventoryManager.Instance.AddItemToInventory(this);
-    }
-
-    public void EquipItem(Item_SO item)
-    {
-
-    }
-
-    public void UnequipItem()
-    {
-
     }
 }
 
