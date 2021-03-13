@@ -105,12 +105,7 @@ public class InventoryManager : MonoBehaviour
                 picked = true;
             break;
             case ItemType.ARMOR:
-                if(EquipmentManager.Instance.GetEquipment(_item.equipmentType) != null){
-                    tempItems.Add(_item);
-                }else
-                {
-                    EquipmentManager.Instance.EquipItem(_item);
-                }
+                tempItems.Add(_item);
                 picked = true;
             break;
             case ItemType.WEAPON:
@@ -118,13 +113,6 @@ public class InventoryManager : MonoBehaviour
                 picked = true;
             break;
             case ItemType.AMMO:
-                for (int i = 0; i < tempItems.Count; i++)
-                {
-                    if(tempItems[i] == _item){
-                        tempItems[i].stackSize += _item.stackSize;
-                        break;
-                    }
-                }
                 _item.UseItem();
                 picked = true;
             break;
