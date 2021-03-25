@@ -20,14 +20,8 @@ using System.Linq;
                 return;
             }
             Instance = this;
-
-            LoadResources();
         }
 
-    #endregion
-
-    #region ScriptableObject data
-    public List<Item_SO> items = new List<Item_SO>();
     #endregion
 
 
@@ -65,11 +59,6 @@ using System.Linq;
         OnPlayerDeathEvent += OnPlayerDeath;
         OnLevelLostEvent += OnLevelLostManager;
         OnLevelWonEvent += OnLevelWonManager;
-    }
-
-    void LoadResources(){
-        items = new List<Item_SO>();
-        items = Resources.LoadAll<Item_SO>("Items").ToList();
     }
 
     private void Update()

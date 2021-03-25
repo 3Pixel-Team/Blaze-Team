@@ -4,9 +4,12 @@ using System.Linq;
 
 public class InventoryManager : MonoBehaviour
 {
-    #region Singleton
-
     public static InventoryManager Instance;
+
+    public List<Item_SO> items = new List<Item_SO>();
+    public List<Item_SO> currentItems = new List<Item_SO>();
+    public List<Item_SO> tempItems = new List<Item_SO>();
+
 
     private void Awake()
     {
@@ -18,217 +21,104 @@ public class InventoryManager : MonoBehaviour
         Instance = this;
 
         DontDestroyOnLoad(this.gameObject);
+
+        LoadResources();
     }
 
-    #endregion
-
-    public static readonly int maxSlots = 12;
-    [SerializeField] private int emptySlots = 12;
-
-    #region Events
-
-    // whenever a change in the items occur, call this function
-    public delegate void OnChangedItem();
-    public OnChangedItem onChangedItemCall;
-
-    #endregion
-
-    public Component inventoryCache = null;
-    [SerializeField] private GameObject inventoryUI = null;
-    [SerializeField] private InventorySlot[] inventorySlots;
-
-    [SerializeField]
-    public List<Item_SO> items = new List<Item_SO>();
-
-    private void Start()
-    {
-        onChangedItemCall += UpdateInventorySlots;
-        GameManager.Instance.OnLevelStartedEvent += InitiateInventoryCache;
-        GameManager.Instance.OnLevelLostEvent += ClearInventoryCache;
-        GameManager.Instance.OnLevelWonEvent += GetInventoryFromCache;
-
-
-
-        LoadInventory();
+    /// <summary>
+    /// Load All items in Resources foldes
+    /// </summary>
+    void LoadResources(){
+        items = new List<Item_SO>();
+        items = Resources.LoadAll<Item_SO>("Items").ToList();
     }
 
-    public void LoadInventory()
-    {
-
-        inventorySlots = inventoryUI.GetComponentsInChildren<InventorySlot>();
-        if (items.Count != 0)
+    /// <summary>
+    /// get all item for the store
+    /// </summary>
+    public List<Item_SO> ItemStore(){
+        List<Item_SO> temps = new List<Item_SO>();
+        foreach (var item in items)
         {
-            for (int i = 0; i < items.Count; i++)
-            {
-                inventorySlots[i].AddItemToSlot(items[i]);
+            if(item.itemType == ItemType.ARMOR || item.itemType == ItemType.WEAPON){
+                temps.Add(item);
             }
         }
-        onChangedItemCall?.Invoke();
+        return temps;
     }
 
-    #region Item Handling
-
-    public bool AddItem(Item_SO item)
-    {
-        if (emptySlots > 0)
-        {
-            foreach (InventorySlot slot in inventorySlots)
+    /// <summary>
+    /// Add an item to the inventory
+    /// </summary>
+    public void AddItemToInventory(Item_SO _item){
+        if(_item.isStackable){
+            for (int i = 0; i < currentItems.Count; i++)
             {
-                if (slot.isEmptySlot)
-                {
-                    slot.AddItemToSlot(item);
-                    items.Add(item);
-                    Debug.Log("[Inventory Manager] Item added to inventory");
-                    break;
+                if(currentItems[i] == _item){
+                    currentItems[i].stackSize += _item.stackSize;
+                    return;
                 }
             }
         }
-        else
-        {
-            Debug.Log("[InventoryManager - AddItem] Inventory is full.");
-            return false;
-        }
-
-        onChangedItemCall?.Invoke();
-        item.stackSize++;
-        return true;
+        currentItems.Add(_item);
     }
 
-    public void RemoveItem(Item_SO item)
-    {
-        items.Remove(item);
-        item.RemoveItem();
-
-        onChangedItemCall?.Invoke();
-    }
-
-    public List<InventorySlot> NotEmptySlots(){
-        List<InventorySlot> slots = new List<InventorySlot>();
-        foreach (var slot in inventorySlots)
-        {
-            if(slot.Item != null){
-                slots.Add(slot);
-            }
-        }
-        return slots;
-    }
-
-    #endregion
-
-    #region Updating UI
-
-    public void UpdateInventorySlots()
-    {
-        for (int i = 0; i < inventorySlots.Length; i++)
-        {
-            if(i < items.Count){
-                inventorySlots[i].AddItemToSlot(items[i]);
-                emptySlots--;
-            }else
+    /// <summary>
+    /// remove an item from the inventory
+    /// </summary>
+    public void RemoveItemFromInventory(Item_SO _item){
+        if(!currentItems.Contains(_item)) return;
+        if(_item.isStackable){
+            for (int i = 0; i < currentItems.Count; i++)
             {
-                inventorySlots[i].ClearSlot();
-                emptySlots++;
-            }
-
-            // if (inventorySlots[i].Item == null)
-            // {
-            //     inventorySlots[i].ClearSlot();
-            //     emptySlots++;
-            // }
-            // else
-            // {
-            //     inventorySlots[i].AddItemToSlot(items[i]);
-            //     emptySlots--;
-            // }
-        }
-    }
-
-    public void ToggleInventory()
-    {
-        onChangedItemCall?.Invoke();
-        if (inventoryUI.activeSelf == true)
-        {
-            inventoryUI.SetActive(false);
-        }
-        else
-        {
-            inventoryUI.SetActive(true);
-        }
-    }
-
-    public bool AddItemToInventory(Item_SO item)
-    {
-        bool itemAdded = false;
-        if (item.isStackable)
-        {
-            foreach (InventorySlot slot in inventorySlots)
-            {
-                InventorySlot tmpSlot = slot.GetComponent<InventorySlot>();
-                var itemTmp = tmpSlot.Item;
-                if (itemTmp != null && itemTmp.itemType == item.itemType && itemTmp.stackSize < item.maxStackSize)
-                {
-                    tmpSlot.AddItemToSlot(item);
-                    itemTmp.stackSize++;
-                    Debug.Log("[Inventory Manager] Item added to the stack of " + item.itemName);
-                    itemAdded = true;
-                    break;
+                if(currentItems[i] == _item){
+                    currentItems[i].stackSize -= _item.stackSize;
+                    return;
                 }
             }
-
-            if (itemAdded)
-            {
-                onChangedItemCall?.Invoke();
-                return true;
-            }
-        }
-
-        if (emptySlots > 0)
+            currentItems.Remove(_item);
+        }else
         {
-            return AddItem(item);
+            currentItems.Remove(_item);
         }
-        else
+    }
+
+    /// <summary>
+    /// Get all items in temporary inventory and move them to inventory
+    /// </summary>
+    public void TransferTempToInventory(){
+        for (int i = 0; i < tempItems.Count; i++)
         {
-            Debug.Log("[Inventory Manager] inventory is full");
+            AddItemToInventory(tempItems[i]);
         }
-
-        return false;
+        tempItems.Clear();
     }
 
-    public void RemoveItemFromInventory(Item_SO item)
-    {
-        if (item.stackSize == 0 || !item.isStackable)
+    /// <summary>
+    /// Add an item to the temporary inventory
+    /// </summary>
+    public void AddItemToTemp(Item_SO _item, out bool picked){
+        switch (_item.itemType)
         {
-            items.Remove(item);
+            case ItemType.HEALTH:
+                _item.UseItem();
+                picked = true;
+            break;
+            case ItemType.ARMOR:
+                tempItems.Add(_item);
+                picked = true;
+            break;
+            case ItemType.WEAPON:
+                tempItems.Add(_item);
+                picked = true;
+            break;
+            case ItemType.AMMO:
+                _item.UseItem();
+                picked = true;
+            break;
+            default:
+                picked = false;
+            break;
         }
-        else
-        {
-            Debug.LogWarning("[Inventory Manager] There is a call to remove item with more than one stack size");
-        }
-
-        onChangedItemCall?.Invoke();
     }
-
-    #endregion
-
-
-    #region Temporary level inventory
-
-    public void InitiateInventoryCache()
-    {
-        inventoryCache = gameObject.AddComponent(typeof(InventoryCache));
-    }
-
-    public void ClearInventoryCache()
-    {
-        Destroy(inventoryCache);
-    }
-    
-    public void GetInventoryFromCache()
-    {
-        // todo
-
-        Destroy(inventoryCache);
-    }
-
-    #endregion
 }

@@ -5,4 +5,14 @@ using UnityEngine;
 public class ItemPickup : MonoBehaviour
 {
     public Item_SO item;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Player")){
+            InventoryManager.Instance.AddItemToTemp(item, out bool picked);
+            if(picked){
+                Destroy(gameObject);
+            }
+        }
+    }
 }
