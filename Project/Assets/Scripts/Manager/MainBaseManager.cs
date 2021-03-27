@@ -6,6 +6,7 @@ public class MainBaseManager : MonoBehaviour
 {
     public static MainBaseManager Instance;
     public UIBaseInventory inventory;
+    public UIBaseSkill skill;
     public UIStore store;
     public GameObject stats;
     public GameObject mission;
@@ -22,8 +23,10 @@ public class MainBaseManager : MonoBehaviour
     }
 
     void Start(){
+        inventory.gameObject.SetActive(true);
         inventory.InitInventory();
-        store.InitStore();
+        store.gameObject.SetActive(false);
+        skill.gameObject.SetActive(false);
     }
 
     //open store
@@ -45,6 +48,17 @@ public class MainBaseManager : MonoBehaviour
         }else
         {
             inventory.gameObject.SetActive(false);
+        }
+    }
+
+    //open skills
+    public void SkillToggle(bool value){
+        if(value){
+            skill.gameObject.SetActive(true);
+            skill.InitSkillPanel();
+        }else
+        {
+            skill.gameObject.SetActive(false);
         }
     }
 
