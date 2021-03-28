@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: skill_gun_04
   skillName: Skill Gun 04
-  skillIcon: {fileID: 21300000, guid: 1f98ba9f263d44444b59ecd78395a2dc, type: 3}
+  skillIcon: {fileID: 21300000, guid: da21d591a2421ff4ba2291530dc090e9, type: 3}
   cost: 1
   coolDownTime: 2
   skillType: 1

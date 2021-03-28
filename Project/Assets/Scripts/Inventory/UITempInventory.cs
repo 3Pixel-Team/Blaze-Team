@@ -20,10 +20,10 @@ public class UITempInventory : MonoBehaviour
             DestroyImmediate(inventoryParent.GetChild(i).gameObject);
         }
 
-        foreach (var item in InventoryManager.Instance.tempItems)
+        foreach (var id in InventoryManager.Instance.tempItems)
         {
             UIItem uiItem = Instantiate(inventoryPrefab, inventoryParent).GetComponent<UIItem>();
-            uiItem.InitInventoryItem(item);
+            uiItem.InitInventoryItem(InventoryManager.Instance.items[id]);
         }
         for (int i = inventoryParent.childCount; i < 24; i++)
         {

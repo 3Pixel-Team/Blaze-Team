@@ -79,17 +79,27 @@ public class SaveManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        // Save();
+        Save();
     }
 }
 
 [System.Serializable]
 public class PlayerData
 {
-    public int playerLevel;
+    [Header("Player")]
+    public int level;
+    public int maxShield;
+    public int maxHealth;
+    public int maxExp;
+    public int currentExp;
+    public int currentCredit;
+    public int baseArmor;
+    public float criticalChance;
+    public int baseDamage;
 
     [Header("Inventory")]
     public List<string> inventoryItems = new List<string>();
+    public List<string> equipmentItems = new List<string>();
 
     [Header("Skill")]
     public int skillPoint = 5;

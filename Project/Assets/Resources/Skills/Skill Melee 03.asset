@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: skill_melee_03
   skillName: Skill Melee 03
-  skillIcon: {fileID: 21300000, guid: 9dd629df0b35dc34aa17855fe50d772e, type: 3}
+  skillIcon: {fileID: 21300000, guid: 455a0388fea029e4bbf75b51a9ff6ad4, type: 3}
   cost: 1
   coolDownTime: 2
   skillType: 0

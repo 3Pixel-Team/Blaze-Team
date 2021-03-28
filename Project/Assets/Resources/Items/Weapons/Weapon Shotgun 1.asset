@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83a9eedc483aef64e9e0d6f4cd20e698, type: 3}
   m_Name: Weapon Shotgun 1
   m_EditorClassIdentifier: 
+  id: weapon_shotgun_01
   itemType: 0
   equipmentType: 5
   weaponType: 2
@@ -30,3 +31,5 @@ MonoBehaviour:
   ammoAmountInInv: 0
   weaponDamage: 10
   armourAmount: 0
+  sellCost: 0
+  buyCost: 0

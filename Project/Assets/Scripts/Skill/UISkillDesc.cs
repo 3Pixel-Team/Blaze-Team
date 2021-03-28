@@ -16,6 +16,7 @@ public class UISkillDesc : MonoBehaviour
     public GameObject unequipButton;
     public GameObject unlockButton;
     Skill_SO skill => MainBaseManager.Instance.skill.currentSelectedSkill;
+    SkillManager skillManager => SkillManager.Instance;
 
     public void InitSkillDesc(){
         skillNameText.text = skill.skillName;
@@ -23,17 +24,17 @@ public class UISkillDesc : MonoBehaviour
         skillDescText.text = skill.skillDesc;
         skillCoolDownText.text = skill.coolDownTime.ToString();
         costText.text = skill.cost.ToString();
-        skillImage.color = SkillManager.Instance.GetIconColor(skill);
-        skillBG.color = SkillManager.Instance.GetBgColor(skill);
+        skillImage.color = skillManager.GetIconColor(skill);
+        skillBG.color = skillManager.GetBgColor(skill);
 
         equipButton.SetActive(false);
         unequipButton.SetActive(false);
         unlockButton.SetActive(false);
         
         //check if this skill is unlocked
-        int lockState = SkillManager.Instance.IsUnlocked(skill);
+        int lockState = skillManager.IsUnlocked(skill);
         if(lockState == 1){
-            if(SkillManager.Instance.IsEquipped(skill)){
+            if(skillManager.IsEquipped(skill)){
                 unequipButton.SetActive(true);
             }else
             {
@@ -47,13 +48,13 @@ public class UISkillDesc : MonoBehaviour
 
     //click 
     public void EquipSkill(){
-        SkillManager.Instance.EquipSkill(skill);
+        skillManager.EquipSkill(skill);
         MainBaseManager.Instance.skill.RefreshSkillPanel();
     }
 
     //click 
     public void UnequipSkill(){
-        SkillManager.Instance.UnequipSkill(skill);
+        skillManager.UnequipSkill(skill);
         MainBaseManager.Instance.skill.RefreshSkillPanel();
     }
 
@@ -61,7 +62,7 @@ public class UISkillDesc : MonoBehaviour
     public void UnlockSkill(){
         if(SaveManager.Instance.playerData.skillPoint >= skill.cost){
             SaveManager.Instance.playerData.skillPoint -= skill.cost;
-            SkillManager.Instance.UnlockSkillData(skill);
+            skillManager.UnlockSkillData(skill);
             MainBaseManager.Instance.skill.RefreshSkillPanel();
         }
     }

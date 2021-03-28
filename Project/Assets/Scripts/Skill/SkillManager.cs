@@ -10,9 +10,9 @@ public class SkillManager : MonoBehaviour
     public Color meleeColor, gunColor, bodyColor, offColor;
     public Color meleeOffColor, gunOffColor, bodyOffColor;
     public Dictionary<string, Skill_SO> skills = new Dictionary<string, Skill_SO>();
-    public List<Skill_SO> meleeSkills = new List<Skill_SO>();
-    public List<Skill_SO> gunSkills = new List<Skill_SO>();
-    public List<Skill_SO> bodySkills = new List<Skill_SO>();
+    public List<string> meleeSkills = new List<string>();
+    public List<string> gunSkills = new List<string>();
+    public List<string> bodySkills = new List<string>();
 
     public Skill_SO meleeSkill {
         get{ return GetSkillSO(playerData.meleeSkill.equipped);}
@@ -44,28 +44,28 @@ public class SkillManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Load All items in Resources foldes
+    /// Load All skills in Resources foldes
     /// </summary>
     void LoadResources(){
         skills = new Dictionary<string, Skill_SO>();
         List<Skill_SO> tempSkills = Resources.LoadAll<Skill_SO>("Skills").ToList();
 
-        meleeSkills = new List<Skill_SO>();
-        gunSkills = new List<Skill_SO>();
-        bodySkills = new List<Skill_SO>();
+        meleeSkills = new List<string>();
+        gunSkills = new List<string>();
+        bodySkills = new List<string>();
         foreach (var skill in tempSkills)
         {
             skills.Add(skill.id, skill);
             switch (skill.skillType)
             {
                 case SkillType.MELEE:
-                    meleeSkills.Add(skill);
+                    meleeSkills.Add(skill.id);
                 break;
                 case SkillType.GUN:
-                    gunSkills.Add(skill);
+                    gunSkills.Add(skill.id);
                 break;
                 case SkillType.BODY:
-                    bodySkills.Add(skill);
+                    bodySkills.Add(skill.id);
                 break;
             }
         }
@@ -201,19 +201,19 @@ public class SkillManager : MonoBehaviour
         switch (skill.skillType)
         {
             case SkillType.MELEE:
-            index = meleeSkills.IndexOf(skill);
+            index = meleeSkills.IndexOf(skill.id);
             if(index < playerData.meleeSkill.level) return 1;
             if(index == playerData.meleeSkill.level) return 0;
             if(index > playerData.meleeSkill.level) return -1;
             break;
             case SkillType.GUN:
-            index = gunSkills.IndexOf(skill);
+            index = gunSkills.IndexOf(skill.id);
             if(index < playerData.gunSkill.level) return 1;
             if(index == playerData.gunSkill.level) return 0;
             if(index > playerData.gunSkill.level) return -1;
             break;
             case SkillType.BODY:
-            index = bodySkills.IndexOf(skill);
+            index = bodySkills.IndexOf(skill.id);
             if(index < playerData.bodySkill.level) return 1;
             if(index == playerData.bodySkill.level) return 0;
             if(index > playerData.bodySkill.level) return -1;

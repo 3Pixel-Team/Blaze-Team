@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83a9eedc483aef64e9e0d6f4cd20e698, type: 3}
   m_Name: Armor Pants 01
   m_EditorClassIdentifier: 
+  id: armor_pants_01
   itemType: 1
   equipmentType: 2
   weaponType: 2
