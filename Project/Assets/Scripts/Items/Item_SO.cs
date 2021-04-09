@@ -5,7 +5,7 @@
 public class Item_SO : ScriptableObject
 {
     #region Initializers
-
+    public string id;
     public ItemType itemType = ItemType.HEALTH;
     public EquipmentType equipmentType = EquipmentType.EMPTY;
     public WeaponType weaponType = WeaponType.EMPTY;

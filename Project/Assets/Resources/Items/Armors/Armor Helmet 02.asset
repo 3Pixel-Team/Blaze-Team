@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83a9eedc483aef64e9e0d6f4cd20e698, type: 3}
   m_Name: Armor Helmet 02
   m_EditorClassIdentifier: 
+  id: armor_helmet_02
   itemType: 1
   equipmentType: 0
   weaponType: 2

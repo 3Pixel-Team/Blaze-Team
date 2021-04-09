@@ -36,7 +36,7 @@ public class UIBaseInventory : MonoBehaviour
         foreach (var item in InventoryManager.Instance.currentItems)
         {
             UIItem uiItem = Instantiate(inventoryPrefab, inventoryParent).GetComponent<UIItem>();
-            uiItem.InitInventoryItem(item);
+            uiItem.InitInventoryItem(InventoryManager.Instance.items[item]);
         }
         for (int i = inventoryParent.childCount; i < 16; i++)
         {
@@ -46,7 +46,7 @@ public class UIBaseInventory : MonoBehaviour
     }
 
     void Equipment(){
-        List<Item_SO> equipments = EquipmentManager.Instance.equipmentItems;
+        List<Item_SO> equipments = EquipmentManager.Instance.EquippedItems();
         for (int i = 0; i < equipmentSlots.Length; i++)
         {
             Item_SO equipment = null;

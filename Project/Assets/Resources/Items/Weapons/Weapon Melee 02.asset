@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83a9eedc483aef64e9e0d6f4cd20e698, type: 3}
   m_Name: Weapon Melee 02
   m_EditorClassIdentifier: 
+  id: weapon_melee_02
   itemType: 0
   equipmentType: 6
   weaponType: 2

@@ -28,15 +28,15 @@ public class UIStore : MonoBehaviour
     public void InitStore(){
         descPanel.SetActive(false);
 
-        List<Item_SO> sellItems = InventoryManager.Instance.currentItems;
+        List<Item_SO> sellItems = InventoryManager.Instance.OwnedItems();
         InitList(sellItems, sellParent, out List<StoreItem> _sellItems);
         for (int i = 0; i < _sellItems.Count; i++)
         {
             _sellItems[i].InitSell(sellItems[i]);
         }
 
-        List<Item_SO> buyItems = InventoryManager.Instance.ItemStore();
-        InitList(InventoryManager.Instance.items, buyParent, out List<StoreItem> _buyItems);
+        List<Item_SO> buyItems = InventoryManager.Instance.StoreItems();
+        InitList(InventoryManager.Instance.items.Values.ToList(), buyParent, out List<StoreItem> _buyItems);
         for (int i = 0; i < _buyItems.Count; i++)
         {
             _buyItems[i].InitBuy(buyItems[i]);
