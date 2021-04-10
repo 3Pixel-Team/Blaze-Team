@@ -11,6 +11,7 @@ public class Skill_SO : ScriptableObject
     public int cost;
     public int coolDownTime;
     public SkillType skillType;
+    public GameObject skillObject;
     [TextArea] public string skillDesc;
 }
 

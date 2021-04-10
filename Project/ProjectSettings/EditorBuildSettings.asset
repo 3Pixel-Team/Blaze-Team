@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/GameOver.unity
     guid: fbefc2329e3ef25468330fc00ea3de76
   - enabled: 1
-    path: Assets/Scenes/LoadScene.unity
-    guid: 7815c2989479942488eb7f47151243f4
+    path: Assets/Scenes/UIGamePlay.unity
+    guid: 17d2d7cf7248c4541984bd1ff5c69867
+  - enabled: 1
+    path: Assets/Scenes/Desert 2.unity
+    guid: 80c0bde90d9b19d4b8e805adc97736e6
   m_configObjects: {}

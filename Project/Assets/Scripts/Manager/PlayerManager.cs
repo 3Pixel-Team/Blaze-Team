@@ -1,8 +1,6 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-
 
 public class PlayerManager : MonoBehaviour
 {
@@ -34,30 +32,16 @@ public class PlayerManager : MonoBehaviour
 
     #region Initializations
 
-    [Header("Health Bar")]
-    public StatusBar healthBar;
-
-    public TextMeshProUGUI healthBarText;
-
-    [Header("Exp Bar")]
-    public StatusBar expBar; //needs to be assigned
-
-    public TextMeshProUGUI expBarText;
-
     [Header("Level and Stats")]
     public CharacterStats ingamePlayerStats;
 
-    public TextMeshProUGUI levelText;
-
     public PlayerAnimator playerAnimator;
 
-    public Button attackButton;
     public AttackDefenition baseAttack;
 
     public ProjectileManager projectileManager;
 
     public Item_SO weapon;
-    public TextMeshProUGUI ammoAmountText;
 
     //shooting variables
     private bool readyToShoot = true;
@@ -68,6 +52,8 @@ public class PlayerManager : MonoBehaviour
     public MissionInventory missionInventory;
 
     #endregion Initializations
+
+    UIGameplayManager uiGameplay => UIGameplayManager.Instance;
 
     #region Start and Update
 
@@ -141,10 +127,7 @@ public class PlayerManager : MonoBehaviour
 
     public void UpdateHealthSlider()
     {
-        UpdateStatusBarText(healthBarText, ingamePlayerStats.GetHealth().ToString(), ingamePlayerStats.GetMaxHealth().ToString());
-        healthBar.UpdateSlider((float)ingamePlayerStats.GetHealth() / (float)ingamePlayerStats.GetMaxHealth());
-        //add an if for armor / shield
-        //healthBar.TakingDamage(amount, playerStats.stats);
+        uiGameplay?.UpdateHealthSlider(ingamePlayerStats);
     }
 
     public void UpdateArmorSlider()
@@ -153,18 +136,17 @@ public class PlayerManager : MonoBehaviour
 
     public void UpdateExpSlider()
     {
-        UpdateStatusBarText(expBarText, ingamePlayerStats.GetActualExp().ToString(), ingamePlayerStats.GetMaxExp().ToString());
-        expBar.UpdateSlider((float)ingamePlayerStats.GetActualExp() / (float)ingamePlayerStats.GetMaxExp());
+        uiGameplay?.UpdateExpSlider(ingamePlayerStats);
     }
 
     public void UpdateLevelText()
     {
-        levelText.text = "Level " + ingamePlayerStats.GetLevel().ToString();
+        uiGameplay?.UpdateLevelText(ingamePlayerStats);
     }
 
     public void UpdateAmmoText()
     {
-        ammoAmountText.text = weapon.currentAmmo + " / " + weapon.magazineSize + " (" + weapon.ammoAmountInInv + ") ";
+        uiGameplay?.UpdateAmmoText(weapon);
     }
 
     public void UpdateStatusBarText(TextMeshProUGUI barText, string min, string max)

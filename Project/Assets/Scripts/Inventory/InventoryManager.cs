@@ -23,8 +23,6 @@ public class InventoryManager : MonoBehaviour
         }
         Instance = this;
 
-        DontDestroyOnLoad(this.gameObject);
-
         LoadResources();
     }
 

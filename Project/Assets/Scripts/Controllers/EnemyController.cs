@@ -79,6 +79,7 @@ public class EnemyController : MonoBehaviour, IPooledObject
     //executed by the animation event "Hit"
     public void Hit()
     {
+        Debug.Log("cek shoot");
         attack.ExecuteAttack(gameObject, player);
     }
 

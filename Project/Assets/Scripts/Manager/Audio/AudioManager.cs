@@ -31,8 +31,6 @@ public class AudioManager : MonoBehaviour
 
 			s.source.outputAudioMixerGroup = mixerGroup;
 		}
-
-		DontDestroyOnLoad(gameObject);
 	}
 
 	//You can use method below to play a song / sound effect (calling it like AudioManager.Instance.Play("Sound effect"); for example)

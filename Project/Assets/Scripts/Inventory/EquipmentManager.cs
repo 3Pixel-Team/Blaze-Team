@@ -14,14 +14,10 @@ public class EquipmentManager : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.Log("[Equipment Manager] There is more than 1 instance of the equipment manager!");
+            Debug.Log("[EquipmentManager] There is more then one inventory Instance");
+            return;
         }
-        else
-        {
-            Instance = this;
-        }
-
-        DontDestroyOnLoad(this.gameObject);
+        Instance = this;
     }
 
     void Start(){

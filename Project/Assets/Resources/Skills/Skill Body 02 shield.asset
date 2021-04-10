@@ -16,6 +16,8 @@ MonoBehaviour:
   skillName: Skill Body 02
   skillIcon: {fileID: 21300000, guid: fb78ead239b0d7441a11c954a74fd596, type: 3}
   cost: 1
-  coolDownTime: 2
+  coolDownTime: 5
   skillType: 2
+  skillObject: {fileID: 3664513255137419113, guid: 382657d0d5491904ab117c65e146355b,
+    type: 3}
   skillDesc: skill desc
