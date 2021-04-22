@@ -5,30 +5,17 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
 
-    public class GameManager : MonoBehaviour
-    {
-        #region Singleton
-
-        public static GameManager Instance { private set; get; }
-
-        private void Awake()
-        {
-            if (Instance != null)
-            {
-                Debug.Log("[GameManager] There is more than one GM Instance");
-                return;
-            }
-            Instance = this;
-        }
-
-    #endregion
-
+public class GameManager : MonoBehaviour
+{
+    public static GameManager Instance { private set; get; }
 
     public CharacterStats_SO playerStats;
+    public GameObject loadingPanel;
+    public Slider loadingBar; 
 
     public enum GameState { GamePause, GameWon, GameLost};
-
     public event EventHandler OnPlayerDeathEvent;
 
     // subscribe to this whenever you want to do something when level starts
@@ -37,6 +24,16 @@ using System.Linq;
     public UnityAction OnLevelLostEvent;
     // subscribe to this whenever you want to do something when the player wins
     public UnityAction OnLevelWonEvent;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.Log("[GameManager] There is more than one GM Instance");
+            return;
+        }
+        Instance = this;
+    }
 
     void Start()
     {
@@ -49,13 +46,6 @@ using System.Linq;
 
         playerStats.LoadStats();
 
-        /*  Start on restart
-     *  GoToRestartScene();
-     */
-
-        /* Start ingame
-     *  GotoGameScene();
-     */
         OnPlayerDeathEvent += OnPlayerDeath;
         OnLevelLostEvent += OnLevelLostManager;
         OnLevelWonEvent += OnLevelWonManager;
@@ -69,8 +59,6 @@ using System.Linq;
         PlaySceneSound(currentScene.name);
 
         #endregion
-
-
     }
 
     #region Sound
@@ -102,58 +90,89 @@ using System.Linq;
 
     #region Scene Changes
 
+    public void GoToHomeScene(){
+        StartCoroutine(AsyncLoadScene("HomeScene"));
+    }
+
+    public void GoToGameScene(){
+        StartCoroutine(AsyncLoadScene("Desert 2"));
+    }
+
+    public void LoadUIGameplay(){
+        SceneManager.LoadScene("UIGameplay", LoadSceneMode.Additive);
+    }
+
+    private IEnumerator AsyncLoadScene(string loadedScene)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(loadedScene);
+        loadingPanel.SetActive(true);
+        operation.allowSceneActivation = false;
+        float targetValue = 0;
+        float currentValue = 0;
+        while (!Mathf.Approximately(currentValue, 1))
+        {
+            targetValue = operation.progress/0.9f;
+            currentValue = Mathf.MoveTowards(currentValue, targetValue, Time.deltaTime);
+            loadingBar.value = currentValue;
+            yield return null;
+        }
+        operation.allowSceneActivation = true;
+        yield return new WaitForSeconds(1);
+        loadingPanel.SetActive(false);
+    }
+
     public void GoToRestartScene()
     {
-        SceneChange("GameOver");
-        // player loses everything he earned
-        OnLevelLostEvent?.Invoke();
+        // SceneChange("GameOver");
+        // // player loses everything he earned
+        // OnLevelLostEvent?.Invoke();
     }
 
-    public void GoToGameScene()
-    {
-        SceneChange("Desert");
-        OnLevelStartedEvent?.Invoke();
-    }
+    // public void GoToGameScene()
+    // {
+    //     SceneChange("Desert");
+    //     OnLevelStartedEvent?.Invoke();
+    // }
 
-    public void GoToMainMenu()
-    {
-        SceneChange("MainMenu");
-        OnLevelLostEvent?.Invoke();
-    }
+    // public void GoToMainMenu()
+    // {
+    //     SceneChange("MainMenu");
+    //     OnLevelLostEvent?.Invoke();
+    // }
 
-    private void SceneChange(string sceneName)
-    {
-        //button animation and other things
+    // private void SceneChange(string sceneName)
+    // {
+    //     //button animation and other things
 
-        if (!_isChangingToLoadScene)
-        {
-            StartCoroutine(ChangeSceneOnLoad(sceneName));
-        }
-    }
+    //     if (!_isChangingToLoadScene)
+    //     {
+    //         StartCoroutine(ChangeSceneOnLoad(sceneName));
+    //     }
+    // }
 
-    private bool _isChangingToLoadScene;
+    // private bool _isChangingToLoadScene;
 
-    IEnumerator ChangeSceneOnLoad(string sceneName)
-    {
-        Scene sceneToUnload = SceneManager.GetActiveScene();
-        if (SceneManager.GetSceneByName("Scene") == sceneToUnload)
-            yield break;
+    // IEnumerator ChangeSceneOnLoad(string sceneName)
+    // {
+    //     Scene sceneToUnload = SceneManager.GetActiveScene();
+    //     if (SceneManager.GetSceneByName("Scene") == sceneToUnload)
+    //         yield break;
 
-        if (sceneName == "GameOver")
-        {
-            SceneManager.LoadSceneAsync(sceneName);
-            yield break;
-        }
-        _isChangingToLoadScene = true;
+    //     if (sceneName == "GameOver")
+    //     {
+    //         SceneManager.LoadSceneAsync(sceneName);
+    //         yield break;
+    //     }
+    //     _isChangingToLoadScene = true;
 
-        SceneManager.LoadScene("LoadScene");
+    //     SceneManager.LoadScene("LoadScene");
 
-        _isChangingToLoadScene = false;
+    //     _isChangingToLoadScene = false;
 
-        yield return null; //wait one frame so the singleton can be loaded in the StatusBar script
+    //     yield return null; //wait one frame so the singleton can be loaded in the StatusBar script
 
-        LoadSceneBar.Instance.LoadScene(sceneName);
-    }
+    //     LoadSceneBar.Instance.LoadScene(sceneName);
+    // }
 
     #endregion
 
@@ -167,7 +186,8 @@ using System.Linq;
     public void OnLevelWonManager()
     {
         OnLevelWonEvent.Invoke();
-        GoToMainMenu();
+        // GoToMainMenu();
+        GoToHomeScene();
     }
 
     #endregion
@@ -176,7 +196,7 @@ using System.Linq;
 
     private void OnPlayerDeath(object sender, EventArgs e)
     {
-        SceneChange("GameOver");
+        // SceneChange("GameOver");
     }
 
     public void DeathEventCall()

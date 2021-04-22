@@ -38,8 +38,6 @@ public class SkillManager : MonoBehaviour
         }
         Instance = this;
 
-        DontDestroyOnLoad(this.gameObject);
-
         LoadResources();
     }
 

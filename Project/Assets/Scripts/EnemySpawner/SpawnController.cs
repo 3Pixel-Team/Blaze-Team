@@ -14,11 +14,7 @@ public class SpawnController : MonoBehaviour
     private int actualWave = 0;
     [HideInInspector] public int actualEnemiesAlive = 0;
 
-    #region Text messages
-
-    public TextMeshProUGUI waitingWaveStartText;
-    public TextMeshProUGUI waveState;
-    #endregion
+    UIGameplayManager uiGameplay => UIGameplayManager.Instance;
 
     void Start()
     {
@@ -42,10 +38,11 @@ public class SpawnController : MonoBehaviour
     private int difficultyRate = 0;
     IEnumerator StartWave()
     {
-        waveState.enabled = true;
-        waveState.text = $"Wave {actualWave + 1} starting";
+        if(uiGameplay == null) yield return new WaitForSeconds(1);
+        uiGameplay.waveState.enabled = true;
+        uiGameplay.waveState.text = $"Wave {actualWave + 1} starting";
         yield return new WaitForSeconds(2f);
-        waveState.enabled = false;
+        uiGameplay.waveState.enabled = false;
 
         EnemySpawnerSO wave = waveList[actualWave];
         while (wave.enemyCount < wave.maxEnemies)
@@ -83,8 +80,8 @@ public class SpawnController : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        waveState.enabled = enabled;
-        waveState.text = "Wave finished";
+        uiGameplay.waveState.enabled = enabled;
+        uiGameplay.waveState.text = "Wave finished";
         actualWave++;
 
         if (actualWave < waveList.Length)
@@ -96,15 +93,15 @@ public class SpawnController : MonoBehaviour
                 difficultyRate++;
             }
 
-            waveState.text = $"Wave {actualWave + 1}";
+            uiGameplay.waveState.text = $"Wave {actualWave + 1}";
             yield return new WaitForSeconds(2);
-            waveState.enabled = false;
+            uiGameplay.waveState.enabled = false;
             StartCoroutine(StartWave());
         }
         else
         {
-            waveState.text = "Stage finished!";
-            waveState.enabled = true;
+            uiGameplay.waveState.text = "Stage finished!";
+            uiGameplay.waveState.enabled = true;
             yield return new WaitForSeconds(2);
             GameManager.Instance.GoToRestartScene();
         }
@@ -112,12 +109,12 @@ public class SpawnController : MonoBehaviour
 
     IEnumerator StartingWave()
     {
-        waitingWaveStartText.enabled = true;
+        uiGameplay.waitingWaveStartText.enabled = true;
         for (int i = 5; i >= 0; i--)
         {
-            waitingWaveStartText.text = "Time left: " + i;
+            uiGameplay.waitingWaveStartText.text = "Time left: " + i;
             yield return new WaitForSeconds(1);
         }
-        waitingWaveStartText.enabled = false;
+        uiGameplay.waitingWaveStartText.enabled = false;
     }
 }

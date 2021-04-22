@@ -10,7 +10,7 @@ public class QuestManager: MonoBehaviour
 
     private void Start()
     {
-        DontDestroyOnLoad(gameObject);
+        
         
     }
 

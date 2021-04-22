@@ -8,9 +8,6 @@ public class PlayerController : MonoBehaviour
     #region Initializers
 
     public NavMeshAgent agent;
-    public Joystick joystick;
-
-    public TouchFieldDrag touchField;
     public float touchPlayerRotation = 0.2f;
 
     public float speed = .5f;
@@ -24,16 +21,13 @@ public class PlayerController : MonoBehaviour
     public FieldOFView fieldOFView;
 
     public bool keyboardPlay;
+    UIGameplayManager uiGameplay => UIGameplayManager.Instance;
 
     #endregion
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        if (touchField == null)
-        {
-            touchField = FindObjectOfType<TouchFieldDrag>();
-        }
         camera = Camera.main;
 
         fieldOFView = GetComponent<FieldOFView>();
@@ -46,11 +40,12 @@ public class PlayerController : MonoBehaviour
         #region Joystick and Movement Controllers
         //gets the movement of the joystick
         if (!keyboardPlay) {
-            if (joystick.Horizontal >= 0.3f)
+            if(uiGameplay == null) return;
+            if (uiGameplay.joystick.Horizontal >= 0.3f)
             {
                 horizontalMove = speed;
             }
-            else if (joystick.Horizontal <= -0.3f)
+            else if (uiGameplay.joystick.Horizontal <= -0.3f)
             {
                 horizontalMove = -speed;
             }
@@ -59,11 +54,11 @@ public class PlayerController : MonoBehaviour
                 horizontalMove = 0f;
             }
 
-            if (joystick.Vertical >= 0.3f)
+            if (uiGameplay.joystick.Vertical >= 0.3f)
             {
                 verticalMove = speed;
             }
-            else if (joystick.Vertical <= -0.3f)
+            else if (uiGameplay.joystick.Vertical <= -0.3f)
             {
                 verticalMove = -speed;
             }
@@ -92,7 +87,7 @@ public class PlayerController : MonoBehaviour
                     transform.LookAt(fieldOFView.getClosestEnemy().transform.position);
                 }
             }
-            if(fieldOFView.getClosestEnemy() != null && !touchField.Pressed)
+            if(fieldOFView.getClosestEnemy() != null && !uiGameplay.touchField.Pressed)
             {
                 transform.LookAt(fieldOFView.getClosestEnemy().transform.position);
             }
@@ -138,9 +133,9 @@ public class PlayerController : MonoBehaviour
 
         #region Rotation
 
-        if (touchField.Pressed)
+        if (uiGameplay.touchField.Pressed)
         {
-            Vector3 dir = touchField.TouchDist;
+            Vector3 dir = uiGameplay.touchField.TouchDist;
             Vector3 rot = new Vector3(0, dir.x);
             transform.Rotate(rot);
         }
