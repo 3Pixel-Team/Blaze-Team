@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b786e843880e5f245b3b91cb593c3e04, type: 3}
-  m_Name: Health
+  m_Name: DefensePower
   m_EditorClassIdentifier: 
-  attributeName: Max Health
-  maxValue: 0
-  addValue: 10
-  attributeType: 0
+  attributeName: Defense Power
+  attributeIcon: {fileID: 0}
+  desc: 
+  maxValue: 100
+  addValue: 5
+  attributeType: 3

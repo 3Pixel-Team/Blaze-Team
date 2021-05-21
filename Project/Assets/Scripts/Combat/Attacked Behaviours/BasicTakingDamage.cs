@@ -21,7 +21,7 @@ public class BasicTakingDamage : MonoBehaviour, IAttackable
             gameObject.GetComponent<EnemyController>().TakeDamage(attack.Damage);
         }
 
-        if (stats.GetHealth() <= 0)
+        if (stats.currentHealth <= 0)
         {
             var destructibles = GetComponents<IDestructable>();
             foreach (IDestructable d in destructibles)

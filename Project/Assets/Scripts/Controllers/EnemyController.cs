@@ -111,11 +111,6 @@ public class EnemyController : MonoBehaviour, IPooledObject
         enemyStats.TakeDamage(amount);
         UpdateHealthSlider();
     }
-
-    public void TakeCredit(int amount)
-    {
-        enemyStats.TakeCredit(amount);
-    }
     #endregion
 
 
@@ -123,21 +118,21 @@ public class EnemyController : MonoBehaviour, IPooledObject
     {
         if (healthBar != null)
         {
-            healthBar.UpdateSlider((float)enemyStats.GetHealth() / (float)enemyStats.GetMaxHealth());
+            healthBar.UpdateSlider((float)enemyStats.currentHealth / (float)enemyStats.GetMaxHealth());
         }
         else
         {
             healthBar = GetComponentInChildren<StatusBar>();
-            healthBar.UpdateSlider((float)enemyStats.GetHealth() / (float)enemyStats.GetMaxHealth());
+            healthBar.UpdateSlider((float)enemyStats.currentHealth / (float)enemyStats.GetMaxHealth());
         }
-        if(enemyStats.GetHealth() == enemyStats.GetMaxHealth())
+        if(enemyStats.currentHealth == enemyStats.GetMaxHealth())
         {
             if (healthBar.gameObject.activeSelf == true)
             {
                 healthBar.gameObject.SetActive(false);
             }
         }
-        else if(enemyStats.GetHealth() == 0)
+        else if(enemyStats.currentHealth == 0)
         {
             if (healthBar.gameObject.activeSelf == true)
             {

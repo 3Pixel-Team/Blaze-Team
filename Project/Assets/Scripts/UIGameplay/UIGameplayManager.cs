@@ -53,11 +53,11 @@ public class UIGameplayManager : MonoBehaviour
         skillBodyButton.InitSkillButton(SkillManager.Instance.bodySkill);
     }
 
-    public void UpdateHealthSlider(CharacterStats ingamePlayerStats)
+    public void UpdateHealthSlider(PlayerStat playerStats)
     {
-        healthBarText.text = ingamePlayerStats.GetHealth() + " / " + ingamePlayerStats.GetMaxHealth();
-        healthBar.maxValue = ingamePlayerStats.GetMaxHealth();
-        healthBar.value = ingamePlayerStats.GetHealth();
+        healthBarText.text = playerStats.currentHealth + " / " + playerStats.GetMaxHealth();
+        healthBar.maxValue = playerStats.GetMaxHealth();
+        healthBar.value = playerStats.currentHealth;
         //add an if for armor / shield
         //healthBar.TakingDamage(amount, playerStats.stats);
     }
@@ -66,20 +66,20 @@ public class UIGameplayManager : MonoBehaviour
     {
     }
 
-    public void UpdateExpSlider(CharacterStats ingamePlayerStats)
+    public void UpdateExpSlider(PlayerStat playerStat)
     {
-        expBarText.text = ingamePlayerStats.GetActualExp() + " / " + ingamePlayerStats.GetMaxExp();
-        expBar.maxValue = ingamePlayerStats.GetActualExp();
-        expBar.value = ingamePlayerStats.GetMaxExp();
+        expBarText.text = playerStat.currentExp + " / " + playerStat.MaxExp();
+        expBar.maxValue = playerStat.currentExp;
+        expBar.value = playerStat.MaxExp();
     }
 
-    public void UpdateLevelText(CharacterStats ingamePlayerStats)
+    public void UpdateLevelText(PlayerStat playerStat)
     {
-        levelText.text = "Level " + ingamePlayerStats.GetLevel().ToString();
+        levelText.text = "Level " + playerStat.currentLevel.ToString();
     }
 
     public void UpdateAmmoText(Item_SO weapon)
     {
-        ammoAmountText.text = weapon.currentAmmo + " / " + weapon.magazineSize + " (" + weapon.ammoAmountInInv + ") ";
+        ammoAmountText.text = weapon.currentAmmo + " / " + weapon.magazineSize;
     }
 }

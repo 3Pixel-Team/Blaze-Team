@@ -1183,7 +1183,7 @@ GameObject:
   - component: {fileID: 8835813358705894056}
   - component: {fileID: 4812641411716372196}
   - component: {fileID: 922951247575886791}
-  - component: {fileID: 4099952972346826202}
+  - component: {fileID: 1766357377785593835}
   - component: {fileID: 461256005258038847}
   - component: {fileID: 9146754746461051384}
   - component: {fileID: 3592006172566125383}
@@ -1287,7 +1287,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 5
   m_ObstacleAvoidanceType: 3
---- !u!114 &4099952972346826202
+--- !u!114 &1766357377785593835
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1296,11 +1296,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4343845956413101915}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4ed1c3328142d54ab81b0efc2eda4d9, type: 3}
+  m_Script: {fileID: 11500000, guid: ab2bfe930a5bb8847a5755a6513e8256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats_Template: {fileID: 11400000, guid: 29c86d8335258ec4a8302cd305ca7b2e, type: 2}
-  stats: {fileID: 0}
+  currentHealth: 0
+  currentShield: 0
+  currentDefense: 0
+  currentAttackPower: 0
+  critChance: 0
+  enemyStat: {fileID: 11400000, guid: e514ccdd8d9cdf649a0feeb1b560cb45, type: 2}
 --- !u!114 &461256005258038847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1317,7 +1321,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   agent: {fileID: 922951247575886791}
   animationController: {fileID: 0}
-  enemyStats: {fileID: 4099952972346826202}
+  enemyStats: {fileID: 0}
   healthBar: {fileID: 4278773653326531529}
   attack: {fileID: 11400000, guid: 2908e18e2b9a8104dba9a0a24cf6dc95, type: 2}
   aggroDistance: 10

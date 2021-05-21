@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    #region Singleton
-
     public static PlayerManager Instance;
-
-    public int maxSlots = 12;
 
     private void Awake()
     {
@@ -20,20 +16,14 @@ public class PlayerManager : MonoBehaviour
         Instance = this;
     }
 
-    #endregion Singleton
-
-    #region Events
 
     public event EventHandler OnLevelChanged;
 
     public event EventHandler OnExpChanged;
 
-    #endregion Events
 
-    #region Initializations
 
-    [Header("Level and Stats")]
-    public CharacterStats ingamePlayerStats;
+    public PlayerStat playerStat;
 
     public PlayerAnimator playerAnimator;
 
@@ -48,10 +38,9 @@ public class PlayerManager : MonoBehaviour
 
     private bool reloading = false;
     public bool isWeaponRaycast;
+    public int currentAmmo;
 
     public MissionInventory missionInventory;
-
-    #endregion Initializations
 
     UIGameplayManager uiGameplay => UIGameplayManager.Instance;
 
@@ -60,7 +49,7 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
 
-        ingamePlayerStats = GetComponent<CharacterStats>();
+        playerStat = GetComponent<PlayerStat>();
         projectileManager = GetComponent<ProjectileManager>();
 
         //Initialize the two events with their method
@@ -87,7 +76,7 @@ public class PlayerManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L)) //Debug purposes, can be removed at any time
         {
             GiveExp(40);
-            Debug.Log($"Actual level:{ingamePlayerStats.GetLevel()} \n Actual Exp:{ingamePlayerStats.GetActualExp()}   Actual Max EXP:{ingamePlayerStats.GetMaxExp()}");
+            Debug.Log($"Actual level:{playerStat.currentLevel} \n Actual Exp:{playerStat.currentExp}   Actual Max EXP:{playerStat.MaxExp()}");
             //Remember to delete the Debug.log in the OnLevelChange() method when you are not longer going to use this debug tool.
         }
 
@@ -127,7 +116,7 @@ public class PlayerManager : MonoBehaviour
 
     public void UpdateHealthSlider()
     {
-        uiGameplay?.UpdateHealthSlider(ingamePlayerStats);
+        uiGameplay?.UpdateHealthSlider(playerStat);
     }
 
     public void UpdateArmorSlider()
@@ -136,12 +125,12 @@ public class PlayerManager : MonoBehaviour
 
     public void UpdateExpSlider()
     {
-        uiGameplay?.UpdateExpSlider(ingamePlayerStats);
+        uiGameplay?.UpdateExpSlider(playerStat);
     }
 
     public void UpdateLevelText()
     {
-        uiGameplay?.UpdateLevelText(ingamePlayerStats);
+        uiGameplay?.UpdateLevelText(playerStat);
     }
 
     public void UpdateAmmoText()
@@ -160,8 +149,8 @@ public class PlayerManager : MonoBehaviour
 
     public void RefreshStats()
     {
-        ingamePlayerStats.stats.currentDamage = ingamePlayerStats.stats.baseDamage;
-        ingamePlayerStats.stats.currentArmor = ingamePlayerStats.stats.baseArmor;
+        playerStat.InitCharacterStat();
+
         UpdateArmorSlider();
         UpdateExpSlider();
         UpdateHealthSlider();
@@ -173,22 +162,22 @@ public class PlayerManager : MonoBehaviour
 
     public void GiveHealth(int amount)
     {
-        ingamePlayerStats.GiveHealth(amount);
+        playerStat.GiveHealth(amount);
     }
 
     public void GiveShield(int amount)
     {
-        ingamePlayerStats.GiveShield(amount);
+        playerStat.GiveShield(amount);
     }
 
     public void GiveCredit(int amount)
     {
-        ingamePlayerStats.GiveCredit(amount);
+        playerStat.GiveCredit(amount);
     }
 
     public void GiveExp(int amount)
     {
-        ingamePlayerStats.GiveExp(amount);
+        playerStat.GiveExp(amount);
     }
 
     #endregion 
@@ -197,8 +186,8 @@ public class PlayerManager : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        ingamePlayerStats.TakeDamage(amount);
-        if (ingamePlayerStats.GetHealth() <= 0)
+        playerStat.TakeDamage(amount);
+        if (playerStat.currentHealth <= 0)
         {
             Debug.Log("Player Died");
 
@@ -208,19 +197,13 @@ public class PlayerManager : MonoBehaviour
         UpdateHealthSlider();
     }
 
-    public void TakeCredit(int amount)
-    {
-        ingamePlayerStats.TakeCredit(amount);
-        //update inventory event
-    }
-
     #endregion Decreasers
 
     #region Attacking
 
     public void OnProjectileCollided(GameObject target)
     {
-        var attack = baseAttack.CreateAttack(ingamePlayerStats, target.GetComponent<CharacterStats>());
+        var attack = baseAttack.CreateAttack(playerStat, target.GetComponent<CharacterStats>());
 
         var attackable = target.GetComponentsInChildren<IAttackable>();
 
@@ -241,26 +224,12 @@ public class PlayerManager : MonoBehaviour
         if (weapon.currentAmmo > 0)
         {
             weapon.currentAmmo--;
-            if (weapon.ammoAmountInInv > 0)
-            {
-                weapon.ammoAmountInInv--;
-            }
 
             projectileManager.ShootWeapon(isWeaponRaycast);
             AudioManager.Instance.Play("Shoot");
 
             UpdateAmmoText();
             Invoke("ResetShot", weapon.shotsPerSec);
-        }
-        else if (weapon.currentAmmo == 0 && weapon.ammoAmountInInv != 0)
-        {
-            Invoke("Reload", 0f);
-        }
-        else if (weapon.currentAmmo == 0 && weapon.ammoAmountInInv == 0)
-        {
-            Debug.Log("[Player Manager] There is not enough ammo in the inventory");
-            ResetShot();
-            return;
         }
         else
         {
@@ -284,20 +253,8 @@ public class PlayerManager : MonoBehaviour
 
     private void ReloadFinished()
     {
-        //if there is not enough ammo in the inventory, only load the amount u have
-        if (weapon.ammoAmountInInv < weapon.magazineSize)
-        {
-            weapon.currentAmmo = weapon.ammoAmountInInv;
-            weapon.ammoAmountInInv -= weapon.currentAmmo;
-            UpdateAmmoText();
-            reloading = false;
-            ResetShot();
-            return;
-        }
-
         //reset magazine and remove the ammo from the inventory
         weapon.currentAmmo = weapon.magazineSize;
-        weapon.ammoAmountInInv -= weapon.magazineSize;
         UpdateAmmoText();
         reloading = false;
         ResetShot();
@@ -324,12 +281,12 @@ public class PlayerManager : MonoBehaviour
     private void OnLevelChange(object sender, EventArgs e) //Method called onlevelchanged event
     {
         //Visual effects or things that happen on the event of leveling up
-        ingamePlayerStats.LevelUpStatsChange();
+        playerStat.LevelUpStatsChange();
         UpdateExpSlider();
         UpdateLevelText();
         RefreshStats();
         //SkillTreeManager.Instance.AddSkillPoints(3);
-        Debug.Log($"LEVEL UP! \n New Stats:  MAXHEALTH = {ingamePlayerStats.stats.maxHealth} MAXSHIELD = {ingamePlayerStats.stats.maxShield} BASEARMOR = {ingamePlayerStats.stats.baseArmor}  "); //Debug purposes, can be removed at any time
+        Debug.Log($"LEVEL UP! \n New Stats:  MAXHEALTH = {playerStat.currentHealth} MAXSHIELD = {playerStat.currentShield} BASEARMOR = {playerStat.currentDefense}  "); //Debug purposes, can be removed at any time
     }
 
     private void OnExpChange(object sender, EventArgs e) //Method called onexpchanged event
@@ -340,13 +297,19 @@ public class PlayerManager : MonoBehaviour
 
     #endregion Leveling Up and EXP
 
-    #region Save
-
-    public void SaveStats()
+    public void AddAmmo(int size)
     {
-        ingamePlayerStats.SaveStats();
-    }
+        if (currentAmmo >= weapon.magazineSize)
+        {
+            Debug.Log("Ammo is full");
+            return;
+        }
 
-    #endregion Save
+        currentAmmo += size;
+        if(currentAmmo > weapon.magazineSize)
+        {
+            currentAmmo = weapon.magazineSize;
+        }
+    }
         
 }

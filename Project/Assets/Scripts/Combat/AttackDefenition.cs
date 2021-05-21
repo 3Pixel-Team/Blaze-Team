@@ -14,8 +14,8 @@ public class AttackDefenition : ScriptableObject
 
     public Attack CreateAttack (CharacterStats attacker, CharacterStats defender)
     {
-        float baseDamage = attacker.GetDamage();
-        float critChance = criticalChance + attacker.GetCriticalChance();
+        float baseDamage = attacker.currentAttackPower;
+        float critChance = criticalChance + attacker.critChance;
 
         bool isCritical = Random.value < critChance;
         if (isCritical)
@@ -24,7 +24,7 @@ public class AttackDefenition : ScriptableObject
         }
         if(defender != null)
         {
-            float defenderArmor = defender.GetArmor();
+            float defenderArmor = defender.currentDefense;
             if(defenderArmor >= baseDamage)
             {
                 baseDamage = 1;

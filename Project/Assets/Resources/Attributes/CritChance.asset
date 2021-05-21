@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b786e843880e5f245b3b91cb593c3e04, type: 3}
-  m_Name: Shield
+  m_Name: CritChance
   m_EditorClassIdentifier: 
-  attributeName: Max Shield
-  maxValue: 0
-  addValue: 5
-  attributeType: 1
+  attributeName: Crit Chance
+  maxValue: 1
+  addValue: 0.01
+  attributeType: 4

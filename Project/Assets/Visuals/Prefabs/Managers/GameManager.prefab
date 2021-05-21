@@ -44,15 +44,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData:
-    level: 0
-    maxShield: 0
-    maxHealth: 0
-    maxExp: 0
-    currentExp: 0
+    playerName: 
+    playerLevel: 0
+    playerXP: 0
     currentCredit: 0
-    baseArmor: 0
-    criticalChance: 0
-    baseDamage: 0
     inventoryItems: []
     equipmentItems: []
     skillPoint: 5
@@ -748,6 +743,50 @@ MonoBehaviour:
     loop: 0
     mixerGroup: {fileID: 0}
     source: {fileID: 0}
+--- !u!1 &858734809273238504
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4163997633801753218}
+  - component: {fileID: 2149202786902389021}
+  m_Layer: 0
+  m_Name: PlayerStatManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4163997633801753218
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858734809273238504}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1114300498601699436}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2149202786902389021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858734809273238504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eacdf83c1548ab744b57f4d6ba453e0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStat: {fileID: 11400000, guid: f5f49822b33bad048a0005ef239e0574, type: 2}
 --- !u!1 &1114300498601699434
 GameObject:
   m_ObjectHideFlags: 0
@@ -781,6 +820,7 @@ Transform:
   - {fileID: 101079642}
   - {fileID: 600758537}
   - {fileID: 64794606}
+  - {fileID: 4163997633801753218}
   - {fileID: 2272231146408993172}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -797,7 +837,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d85bc08edadd7e49b4072d58284596b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 11400000, guid: 895ce53a034dd264ead5b0da2e8d7a70, type: 2}
   loadingPanel: {fileID: 1144538125}
   loadingBar: {fileID: 1596016178}
 --- !u!1 &5048741016770453756
@@ -832,7 +871,7 @@ RectTransform:
   m_Children:
   - {fileID: 1144538126}
   m_Father: {fileID: 1114300498601699436}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

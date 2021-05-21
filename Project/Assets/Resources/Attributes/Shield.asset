@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b786e843880e5f245b3b91cb593c3e04, type: 3}
-  m_Name: Armor
+  m_Name: Shield
   m_EditorClassIdentifier: 
-  attributeName: Armor
+  attributeName: Shield
+  attributeIcon: {fileID: 0}
+  desc: 
   maxValue: 0
-  addValue: 5
-  attributeType: 3
+  addValue: 0
+  attributeType: 1
