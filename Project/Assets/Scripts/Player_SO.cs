@@ -14,14 +14,14 @@ public class Player_SO : ScriptableObject
     public int maxExp = 100;
     public float expMaxlvlMultiplier = 1.25f; //how much the maxExp will increase on each level
 
-    [Header("default attributes")]
+    [Header("Default attributes")]
     public int health;
     public int shield;
     public int defense;
     public int attackPower;
+    public float speed;
     [Range(0, 1)] public float criticalChance;
     [Range(0, 1)] public float criticalMultiplier;
-    public float speed;
 
     public float GetDefaultStat(TypeOfAttributes typeOfAttributes)
     {

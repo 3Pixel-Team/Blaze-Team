@@ -10,7 +10,7 @@ public class EnemyController : MonoBehaviour, IPooledObject
     public NavMeshAgent agent;
     public EnemyAnimationController animationController;
 
-    public CharacterStats enemyStats;
+    public EnemyStat enemyStats;
     public StatusBar healthBar;
 
     public AttackDefenition attack;
@@ -18,7 +18,6 @@ public class EnemyController : MonoBehaviour, IPooledObject
     private float _timeOfLastAttack;
 
     private bool _isAlive = true;
-    public  float aggroDistance;
     private float _distanceFromPlayer;
     public  float gizmoRadius = 5f;
 
@@ -34,7 +33,8 @@ public class EnemyController : MonoBehaviour, IPooledObject
         player = PlayerManager.Instance.gameObject;
         animationController = GetComponent<EnemyAnimationController>();
 
-        enemyStats = GetComponent<CharacterStats>();
+        enemyStats = GetComponent<EnemyStat>();
+        enemyStats.InitCharacterStat();
         UpdateHealthSlider();
 
         _timeOfLastAttack = 0.1f;
@@ -43,25 +43,24 @@ public class EnemyController : MonoBehaviour, IPooledObject
     // Update is called once per frame
     void Update()
     {
-
         if (agent.enabled)
         {
             _distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-            if (_distanceFromPlayer <= aggroDistance)
+            if (_distanceFromPlayer <= enemyStats.aggroDistance)
             {
                 agent.SetDestination(player.transform.position);
                 animationController.EnemyMovement();
             }
-            else if (_distanceFromPlayer > aggroDistance * 1.5)
+            else if (_distanceFromPlayer > enemyStats.aggroDistance * 1.5)
             {
                 agent.SetDestination(transform.position);
                 animationController.EnemyMovement();
             }
 
             float timeSinceLastAttack = Time.time - _timeOfLastAttack;
-            bool attackOnCoolDown = timeSinceLastAttack < attack.coolDown;
-            bool attackInRange = _distanceFromPlayer < attack.range;
+            bool attackOnCoolDown = timeSinceLastAttack < enemyStats.attackInterval;
+            bool attackInRange = _distanceFromPlayer < enemyStats.attackRange;
             agent.isStopped = attackOnCoolDown;
             if (!attackOnCoolDown && attackInRange)
             {
@@ -79,7 +78,6 @@ public class EnemyController : MonoBehaviour, IPooledObject
     //executed by the animation event "Hit"
     public void Hit()
     {
-        Debug.Log("cek shoot");
         attack.ExecuteAttack(gameObject, player);
     }
 

@@ -6,9 +6,13 @@ public class PlayerStat : CharacterStats
 {
     public Player_SO playerStat;
 
+    public int currentShield;
+    public int currentDefense;
+
     public int currentLevel;
     public int currentExp;
     public int currentCredit;
+    public int currentAmmo;
 
     PlayerStatManager stat => PlayerStatManager.Instance;
 
@@ -20,40 +24,79 @@ public class PlayerStat : CharacterStats
         currentShield = (int)stat.GetTotalAttributeLevel(TypeOfAttributes.SHIELD);
         currentDefense = (int)stat.GetTotalAttributeLevel(TypeOfAttributes.DEFENCE);
         currentAttackPower = (int)stat.GetTotalAttributeLevel(TypeOfAttributes.ATTACK);
-        critChance = (int)stat.GetTotalAttributeLevel(TypeOfAttributes.CRITCHANCE);
+        critChance = stat.GetTotalAttributeLevel(TypeOfAttributes.CRITCHANCE);
+        critMultiplier = stat.GetTotalAttributeLevel(TypeOfAttributes.CRITMULTIPLIER);
+
+        currentLevel = SaveManager.Instance.playerData.playerLevel;
+        currentExp = SaveManager.Instance.playerData.playerXP;
+        currentAmmo = EquipmentManager.Instance.GetEquipment(EquipmentType.WEAPON).magazineSize;
+        attackRange = EquipmentManager.Instance.GetEquipment(EquipmentType.WEAPON).attackRange;
+        attackInterval = EquipmentManager.Instance.GetEquipment(EquipmentType.WEAPON).attackInterval;
+
+        UIGameplayManager.Instance?.UpdatePlayerStatUI();
     }
 
     public override void TakeDamage(int amount)
     {
+        //calculate damage after defense, defense take 1/3 of damage
+        int def = Mathf.CeilToInt((float)amount / 3f);
+        int defense = currentDefense;
+        currentDefense -= def;
+        if (currentDefense < 0) currentDefense = 0;
+        amount -= Mathf.Abs(defense - currentDefense);
+
+        //calculate damage after shield
+        int shield = currentShield;
         currentShield -= amount;
-        int diff = Mathf.Abs(currentShield);
         if (currentShield < 0) currentShield = 0;
-        base.TakeDamage(diff);
+        amount -= Mathf.Abs(shield - currentShield);
+
+        if (amount < 0) amount = 0;
+        base.TakeDamage(amount);
     }
 
     public override int GetMaxHealth()
     {
-        return (int)stat.GetAttributeLevel(TypeOfAttributes.HEALTH, out bool maxed);
+        return (int)stat.GetTotalAttributeLevel(TypeOfAttributes.HEALTH);
     }
 
-    public void GiveHealth(int amount)
+    public override void Dead()
     {
+        GameManager.Instance.DeathEventCall();
+        base.Dead();
+    }
+
+    public void GiveHealth(int amount, out bool success)
+    {
+        int maxHealth = (int)stat.GetTotalAttributeLevel(TypeOfAttributes.HEALTH);
+        if (currentHealth >= maxHealth)
+        {
+            success = false;
+            return;
+        }
+        success = true;
         currentHealth += amount;
-        int maxHealth = (int)stat.GetAttributeLevel(TypeOfAttributes.HEALTH, out bool maxed);
         if(currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
         }
     }
 
-    public void GiveShield(int amount)
+    public void GiveShield(int amount, out bool success)
     {
+        int maxShield = (int)stat.GetTotalAttributeLevel(TypeOfAttributes.SHIELD);
+        if (currentShield >= maxShield)
+        {
+            success = false;
+            return;
+        }
+        success = true;
         currentShield += amount;
-        int maxShield = (int)stat.GetAttributeLevel(TypeOfAttributes.SHIELD, out bool maxed);
         if (currentShield > maxShield)
         {
             currentShield = maxShield;
         }
+        UIGameplayManager.Instance.UpdatePlayerStatUI();
     }
 
     public void GiveCredit(int amount)
@@ -63,9 +106,13 @@ public class PlayerStat : CharacterStats
 
     public void LevelUpStatsChange()
     {
-        currentHealth = (int)stat.GetAttributeLevel(TypeOfAttributes.HEALTH, out _);
-        currentShield = (int)stat.GetAttributeLevel(TypeOfAttributes.SHIELD, out _);
-        currentDefense = (int)stat.GetAttributeLevel(TypeOfAttributes.DEFENCE, out _);
+        currentHealth = (int)stat.GetTotalAttributeLevel(TypeOfAttributes.HEALTH);
+        currentShield = (int)stat.GetTotalAttributeLevel(TypeOfAttributes.SHIELD);
+        currentDefense = (int)stat.GetTotalAttributeLevel(TypeOfAttributes.DEFENCE);
+
+        currentExp = 0;
+
+        UIGameplayManager.Instance.UpdatePlayerStatUI();
     }
 
     public int MaxExp()
@@ -82,12 +129,26 @@ public class PlayerStat : CharacterStats
             {
                 currentExp -= MaxExp();
                 currentLevel++;
-                PlayerManager.Instance.LevelUpEventCall();
+                LevelUpStatsChange();
             }
         }
-        else
+
+        UIGameplayManager.Instance.UpdatePlayerStatUI();
+    }
+
+    public void AddAmmo(int size)
+    {
+        int maxAmmo = EquipmentManager.Instance.GetEquipment(EquipmentType.WEAPON).magazineSize;
+        if (currentAmmo >= maxAmmo)
         {
-            PlayerManager.Instance.ExpChangeEventCall();
+            Debug.Log("Ammo is full");
+            return;
+        }
+
+        currentAmmo += size;
+        if (currentAmmo > maxAmmo)
+        {
+            currentAmmo = maxAmmo;
         }
     }
 }

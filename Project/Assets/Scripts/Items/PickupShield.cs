@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickupHeal : MonoBehaviour
+public class PickupShield : MonoBehaviour
 {
-    public int heal;
+    public int shield;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            PlayerManager.Instance.AddHealth(heal, out bool success);
+            PlayerManager.Instance.AddShield(shield, out bool success);
+            UIGameplayManager.Instance.UpdatePlayerStatUI();
 
             if(success) Destroy(gameObject);
         }

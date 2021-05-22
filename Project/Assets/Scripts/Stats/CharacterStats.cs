@@ -4,10 +4,12 @@ using UnityEngine;
 public abstract class CharacterStats : MonoBehaviour
 {
     public int currentHealth;
-    public int currentShield;
-    public int currentDefense;
+   
     public int currentAttackPower;
     public float critChance;
+    public float critMultiplier;
+    public float attackRange;
+    public float attackInterval;
 
     public abstract void InitCharacterStat();
 
@@ -17,9 +19,15 @@ public abstract class CharacterStats : MonoBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            Debug.Log("character dead", gameObject);
+            Dead();
         }
+        UIGameplayManager.Instance.UpdatePlayerStatUI();
     }
 
     public abstract int GetMaxHealth();
+
+    public virtual void Dead()
+    {
+        Debug.Log("character dead", gameObject);
+    }
 }

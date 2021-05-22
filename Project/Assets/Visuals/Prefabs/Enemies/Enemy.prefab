@@ -1300,11 +1300,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  currentShield: 0
-  currentDefense: 0
   currentAttackPower: 0
   critChance: 0
+  critMultiplier: 0
+  attackRange: 0
+  attackInterval: 0
   enemyStat: {fileID: 11400000, guid: e514ccdd8d9cdf649a0feeb1b560cb45, type: 2}
+  aggroDistance: 10
 --- !u!114 &461256005258038847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1324,7 +1326,6 @@ MonoBehaviour:
   enemyStats: {fileID: 0}
   healthBar: {fileID: 4278773653326531529}
   attack: {fileID: 11400000, guid: 2908e18e2b9a8104dba9a0a24cf6dc95, type: 2}
-  aggroDistance: 10
   gizmoRadius: 10
   targetSprite: {fileID: 0}
 --- !u!114 &9146754746461051384

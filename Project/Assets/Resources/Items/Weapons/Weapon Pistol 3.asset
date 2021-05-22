@@ -29,9 +29,10 @@ MonoBehaviour:
   shield: 0
   defensePower: 0
   attackPower: 5
+  speed: 0
   critChance: 0.25
-  currentAmmo: 0
+  critMultiplier: 0
   reloadTime: 2
-  shotsPerSec: 3
+  attackInterval: 0.25
   magazineSize: 30
-  weaponDamage: 10
+  attackRange: 100

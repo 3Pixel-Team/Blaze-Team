@@ -135,5 +135,5 @@ public enum TypeOfAttributes
     DEFENCE,
     CRITCHANCE,
     CRITMULTIPLIER,
-    SPEED
+    SPEED,
 }

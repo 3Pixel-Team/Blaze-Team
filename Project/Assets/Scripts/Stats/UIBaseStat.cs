@@ -21,6 +21,7 @@ public class UIBaseStat : MonoBehaviour
 
     public void InitStat()
     {
+        playerImage.sprite = PlayerStatManager.Instance.playerStat.playerIcon;
         playerNameText.text = playerData.playerName;
         levelText.text = playerData.playerLevel.ToString();
         xpText.text = playerData.playerXP.ToString();

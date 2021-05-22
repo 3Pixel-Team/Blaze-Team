@@ -15,13 +15,16 @@ public class UIGameplayManager : MonoBehaviour
     public SkillButton skillGunButton;
     public SkillButton skillBodyButton;
 
-    [Header("Health Bar")]
-    public Slider healthBar;
-    public TextMeshProUGUI healthBarText;
-
-    [Header("Exp Bar")]
+    [Header("Player Stat")]
+    public Image playerImage;
     public Slider expBar;
     public TextMeshProUGUI expBarText;
+    public Slider healthBar;
+    public TextMeshProUGUI healthBarText;
+    public Slider shieldBar;
+    public TextMeshProUGUI shieldBarText;
+    public Slider defenseBar;
+    public TextMeshProUGUI defenseBarText;
 
     [Space]
     public TextMeshProUGUI levelText;
@@ -44,6 +47,7 @@ public class UIGameplayManager : MonoBehaviour
 
     void Start(){
         InitSkillControl();
+        UpdatePlayerStatUI();
     }
 
     void InitSkillControl()
@@ -53,33 +57,41 @@ public class UIGameplayManager : MonoBehaviour
         skillBodyButton.InitSkillButton(SkillManager.Instance.bodySkill);
     }
 
-    public void UpdateHealthSlider(PlayerStat playerStats)
+    //button
+    public void Shoot()
     {
-        healthBarText.text = playerStats.currentHealth + " / " + playerStats.GetMaxHealth();
-        healthBar.maxValue = playerStats.GetMaxHealth();
-        healthBar.value = playerStats.currentHealth;
-        //add an if for armor / shield
-        //healthBar.TakingDamage(amount, playerStats.stats);
+        PlayerManager.Instance.Shooting();
     }
 
-    public void UpdateArmorSlider()
+    public void UpdatePlayerStatUI()
     {
-    }
+        PlayerStat playerStat = PlayerManager.Instance.playerStat;
 
-    public void UpdateExpSlider(PlayerStat playerStat)
-    {
+        playerImage.sprite = playerStat.playerStat.playerIcon;
+        levelText.text = playerStat.currentLevel.ToString();
+
         expBarText.text = playerStat.currentExp + " / " + playerStat.MaxExp();
-        expBar.maxValue = playerStat.currentExp;
-        expBar.value = playerStat.MaxExp();
+        expBar.maxValue = playerStat.MaxExp();
+        expBar.value = playerStat.currentExp;
+
+        int maxHealth = (int)PlayerStatManager.Instance.GetTotalAttributeLevel(TypeOfAttributes.HEALTH);
+        healthBarText.text = playerStat.currentHealth + " / " + maxHealth;
+        healthBar.maxValue = maxHealth;
+        healthBar.value = playerStat.currentHealth;
+
+        int maxShield = (int)PlayerStatManager.Instance.GetTotalAttributeLevel(TypeOfAttributes.SHIELD);
+        shieldBarText.text = playerStat.currentShield + " / " +  maxShield;
+        shieldBar.maxValue = maxShield;
+        shieldBar.value = playerStat.currentShield;
+
+        int maxDefense = (int)PlayerStatManager.Instance.GetTotalAttributeLevel(TypeOfAttributes.DEFENCE);
+        defenseBarText.text = playerStat.currentDefense + " / " + maxDefense;
+        defenseBar.maxValue = maxDefense;
+        defenseBar.value = playerStat.currentDefense;
     }
 
-    public void UpdateLevelText(PlayerStat playerStat)
+    public void UpdateAmmoText(PlayerStat playerStat, Item_SO weapon)
     {
-        levelText.text = "Level " + playerStat.currentLevel.ToString();
-    }
-
-    public void UpdateAmmoText(Item_SO weapon)
-    {
-        ammoAmountText.text = weapon.currentAmmo + " / " + weapon.magazineSize;
+        ammoAmountText.text = playerStat.currentAmmo + " / " + weapon.magazineSize;
     }
 }

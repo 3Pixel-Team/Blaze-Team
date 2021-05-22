@@ -11,10 +11,10 @@ public class Enemy_SO : ScriptableObject
 
     [Header("Attributes")]
     public int health;
-    public int shield;
-    public int defense;
     public int attack;
+    public float speed;
+    public float attackRange;
+    public float attackInterval;
     [Range(0, 1)] public float criticalChance;
     [Range(0, 1)] public float criticalMultiplier;
-    public float speed;
 }
