@@ -16,6 +16,7 @@ public class EnemyStat : CharacterStats
         currentAttackPower = enemyStat.attack;
         critChance = enemyStat.criticalChance;
         critMultiplier = enemyStat.criticalMultiplier;
+
         attackRange = enemyStat.attackRange;
         attackInterval = enemyStat.attackInterval;
     }

@@ -35,7 +35,6 @@ public class Item_SO : ScriptableObject
     [Range(0, 1)] public float critMultiplier;
 
     [Header("Weapon Stat")]
-    public float reloadTime;
     public float attackInterval;
     public int magazineSize;
     public float attackRange;
@@ -60,8 +59,9 @@ public class Item_SO : ScriptableObject
         if  (defensePower > 0) temps.Add("Defense Power", defensePower);
         if  (attackPower > 0) temps.Add("Attack Power", attackPower);
         if  (critChance > 0) temps.Add("Crit Chance", critChance);
+        if  (critMultiplier > 0) temps.Add("Crit Multiplier", critMultiplier);
+        if  (speed < 0) temps.Add("Speed", speed);
 
-        if (reloadTime > 0) temps.Add("Reload Time", reloadTime);
         if (attackInterval > 0) temps.Add("Attack Interval", attackInterval);
         if (magazineSize > 0) temps.Add("Magazine Size", magazineSize);
         if (attackRange > 0) temps.Add("Attack Range", attackRange);

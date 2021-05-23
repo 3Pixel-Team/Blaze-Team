@@ -96,9 +96,10 @@ public class UIGameplayManager : MonoBehaviour
         defenseBar.value = playerStat.currentDefense;
     }
 
-    public void UpdateAmmoText(PlayerStat playerStat, Item_SO weapon)
+    public void UpdateAmmoText(PlayerStat playerStat)
     {
-        ammoAmountText.text = playerStat.currentAmmo + " / " + weapon.magazineSize;
+        int maxAmmo = EquipmentManager.Instance.GetEquipment(EquipmentType.WEAPON).magazineSize;
+        ammoAmountText.text = playerStat.currentAmmo + " / " + maxAmmo;
     }
 
     //button

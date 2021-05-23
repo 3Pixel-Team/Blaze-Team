@@ -10,7 +10,6 @@ public class PlayerManager : MonoBehaviour
     public PlayerAnimator playerAnimator;
     public AttackDefenition baseAttack;
     public ProjectileManager projectileManager;
-    public Item_SO weapon;
 
     //shooting variables
     private bool readyToShoot = true;
@@ -35,10 +34,9 @@ public class PlayerManager : MonoBehaviour
     {
         playerStat = GetComponent<PlayerStat>();
         projectileManager = GetComponent<ProjectileManager>();
-        weapon = EquipmentManager.Instance.GetEquipment(EquipmentType.WEAPON);
 
         //updates all the UI
-        uiGameplay?.UpdateAmmoText(playerStat, weapon);
+        uiGameplay?.UpdateAmmoText(playerStat);
         playerStat.InitCharacterStat();
     }
 
@@ -102,8 +100,8 @@ public class PlayerManager : MonoBehaviour
             projectileManager.ShootWeapon(isWeaponRaycast);
             AudioManager.Instance.Play("Shoot");
 
-            uiGameplay?.UpdateAmmoText(playerStat, weapon);
-            Invoke(nameof(ResetShot), weapon.attackInterval);
+            uiGameplay?.UpdateAmmoText(playerStat);
+            Invoke(nameof(ResetShot), playerStat.attackInterval);
         }
         else
         {
@@ -134,7 +132,7 @@ public class PlayerManager : MonoBehaviour
     {
         AudioManager.Instance.Play("Reload");
         playerStat.AddAmmo(amount);
-        uiGameplay?.UpdateAmmoText(playerStat, weapon);
+        uiGameplay?.UpdateAmmoText(playerStat);
         ResetShot();
     }
 }
