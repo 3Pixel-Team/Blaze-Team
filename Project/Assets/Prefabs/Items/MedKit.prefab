@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 8031665249181462937}
   - component: {fileID: 5385291052830356433}
   - component: {fileID: 5045718169758048017}
-  - component: {fileID: -7731717171081218144}
+  - component: {fileID: 829023609962186964}
   m_Layer: 0
-  m_Name: MedKitTest
+  m_Name: MedKit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,12 +89,12 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4201297222242044416}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-7731717171081218144
+--- !u!114 &829023609962186964
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4201297222242044416}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ad15f4d31bc59e4e81bacf339271d3f, type: 3}
+  m_Script: {fileID: 11500000, guid: a2425fb3ed9014f4a82236d151087374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 4a958f584a2325d49a119fa7f94c8e5d, type: 2}
+  heal: 25

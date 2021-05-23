@@ -995,3 +995,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 556b35f01dd24474688d9d073dd3601f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultWeapon: {fileID: 11400000, guid: cd18d599d66cd754bb4df5ebdd4a8cc0, type: 2}

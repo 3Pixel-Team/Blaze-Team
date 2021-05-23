@@ -39,10 +39,10 @@ public class SpawnController : MonoBehaviour
     IEnumerator StartWave()
     {
         if(uiGameplay == null) yield return new WaitForSeconds(1);
-        uiGameplay.waveState.enabled = true;
+        uiGameplay.waveState.gameObject.SetActive(true);
         uiGameplay.waveState.text = $"Wave {actualWave + 1} starting";
         yield return new WaitForSeconds(2f);
-        uiGameplay.waveState.enabled = false;
+        uiGameplay.waveState.gameObject.SetActive(false);
 
         EnemySpawnerSO wave = waveList[actualWave];
         while (wave.enemyCount < wave.maxEnemies)
@@ -86,7 +86,7 @@ public class SpawnController : MonoBehaviour
 
         if (actualWave < waveList.Length)
         {
-            //StartCoroutine(StartingWave());
+            StartCoroutine(StartingWave());
             yield return new WaitForSeconds(6f);
             if (actualWave % 3 == 0)
             {
@@ -109,12 +109,12 @@ public class SpawnController : MonoBehaviour
 
     IEnumerator StartingWave()
     {
-        uiGameplay.waitingWaveStartText.enabled = true;
+        uiGameplay.waitingWaveStartText.gameObject.SetActive(true);
         for (int i = 5; i >= 0; i--)
         {
             uiGameplay.waitingWaveStartText.text = "Time left: " + i;
             yield return new WaitForSeconds(1);
         }
-        uiGameplay.waitingWaveStartText.enabled = false;
+        uiGameplay.waitingWaveStartText.gameObject.SetActive(false);
     }
 }

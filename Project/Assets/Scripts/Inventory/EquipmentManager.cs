@@ -8,6 +8,8 @@ public class EquipmentManager : MonoBehaviour
 
     public static EquipmentManager Instance;
 
+    public Item_SO defaultWeapon;
+
     public List<string> equipmentItems{
         get{return SaveManager.Instance.playerData.equipmentItems;}
         set{SaveManager.Instance.playerData.equipmentItems = value;}
@@ -37,6 +39,10 @@ public class EquipmentManager : MonoBehaviour
             if(InventoryManager.Instance.items.ContainsKey(equipmentItems[i]) == false){
                 equipmentItems.RemoveAt(i);
             }
+        }
+        if(equipmentItems.Count <= 0)
+        {
+            EquipItem(defaultWeapon);
         }
     }
 

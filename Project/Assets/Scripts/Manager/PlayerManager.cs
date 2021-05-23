@@ -35,6 +35,7 @@ public class PlayerManager : MonoBehaviour
     {
         playerStat = GetComponent<PlayerStat>();
         projectileManager = GetComponent<ProjectileManager>();
+        weapon = EquipmentManager.Instance.GetEquipment(EquipmentType.WEAPON);
 
         //updates all the UI
         uiGameplay?.UpdateAmmoText(playerStat, weapon);

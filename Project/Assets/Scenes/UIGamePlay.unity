@@ -2422,7 +2422,7 @@ RectTransform:
   - {fileID: 2023688284}
   - {fileID: 390109999}
   m_Father: {fileID: 1281882522}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3801,7 +3801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.78431374}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3856,7 +3856,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1281882522}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -3905,7 +3905,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 740215378}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1069988212}
+        m_MethodName: OpenPanelPause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &740215378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4610,7 +4621,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1029269387}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1069988212}
+        m_MethodName: ClosePanelPause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1029269387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4696,6 +4718,8 @@ MonoBehaviour:
   ammoAmountText: {fileID: 172698609}
   waitingWaveStartText: {fileID: 724067402}
   waveState: {fileID: 173799478}
+  pausePanel: {fileID: 732154908}
+  tempInventory: {fileID: 1123507069}
 --- !u!4 &1069988213
 Transform:
   m_ObjectHideFlags: 0
@@ -5113,7 +5137,7 @@ RectTransform:
   - {fileID: 41999153}
   - {fileID: 125167954}
   m_Father: {fileID: 1281882522}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -5440,10 +5464,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 740215376}
   - {fileID: 604256200}
   - {fileID: 1157506970}
   - {fileID: 2019430775}
+  - {fileID: 740215376}
   - {fileID: 172698608}
   - {fileID: 732154909}
   - {fileID: 262896120}
@@ -7546,7 +7570,7 @@ RectTransform:
   - {fileID: 724067401}
   - {fileID: 173799477}
   m_Father: {fileID: 1281882522}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

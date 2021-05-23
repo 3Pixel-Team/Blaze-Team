@@ -35,6 +35,10 @@ public class UIGameplayManager : MonoBehaviour
     public TextMeshProUGUI waitingWaveStartText;
     public TextMeshProUGUI waveState;
 
+    [Space]
+    public GameObject pausePanel;
+    public UITempInventory tempInventory;
+
     private void Awake()
     {
         if (Instance != null)
@@ -48,6 +52,8 @@ public class UIGameplayManager : MonoBehaviour
     void Start(){
         InitSkillControl();
         UpdatePlayerStatUI();
+
+        pausePanel.SetActive(false);
     }
 
     void InitSkillControl()
@@ -93,5 +99,20 @@ public class UIGameplayManager : MonoBehaviour
     public void UpdateAmmoText(PlayerStat playerStat, Item_SO weapon)
     {
         ammoAmountText.text = playerStat.currentAmmo + " / " + weapon.magazineSize;
+    }
+
+    //button
+    public void OpenPanelPause()
+    {
+        pausePanel.SetActive(true);
+        tempInventory.InitInventory();
+        Time.timeScale = 0;
+    }
+
+    //button
+    public void ClosePanelPause()
+    {
+        pausePanel.SetActive(false);
+        Time.timeScale = 1;
     }
 }
